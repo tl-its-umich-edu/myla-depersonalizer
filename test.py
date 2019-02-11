@@ -7,7 +7,7 @@ from ffx_helper import FFXEncrypt
 logging.basicConfig(level=os.getenv("log_level", "TRACE"))
 
 @logged
-class TestUtil(unittest.TestCase):
+class TestAnon(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ffx = FFXEncrypt(b"testpass")
