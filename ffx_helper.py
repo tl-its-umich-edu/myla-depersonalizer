@@ -9,19 +9,27 @@ logger = logging.getLogger()
 @logged
 class FFXEncrypt():
 
-    def __init__(self, ffx_secret):
+    def __init__(self, ffx_secret: str):
         self.ffx_secret = ffx_secret
+
+    def count_replace(self, s: str, old: str, new: str, max: int) -> (int, str):
+        count = s.count(old)
+        v = s.replace(old, new, max)
+        return count, v
 
     #Encrypt with FFX!
     # TODO: Handle Decimals (probably just convert to full int and ffx each part)
     # TODO: Detect if it's all upper/lower or mixed case to determine correct alphabet
-    def encrypt(self, val, prefix=''):
+    def encrypt(self, val, prefix: str=''):
         # First just convert to string
         try:
             val = str(val)
             if prefix:
                 prefix = str(prefix)
-                val = val.replace(prefix, '', 1)
+                (replace_count, val) = self.count_replace(val, prefix, '', 1)
+                # If there was no prefix count, just remove the prefix
+                if replace_count == 0:
+                    prefix = ''
             # Length of the string without the prefix
             # So ffx_encrypt(1123, 1) will return the same postfix as ffx_encrypt(123)
             vlen = len(val)
@@ -40,5 +48,5 @@ class FFXEncrypt():
             # Return it as a string
             return prefix + enc
         except Exception as e:
-            logger.warn(f"Cannot encrypt {type(val)}")
+            logger.warn(f"Cannot encrypt {val} {type(val)}")
             return val

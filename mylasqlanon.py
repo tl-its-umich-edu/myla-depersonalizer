@@ -45,15 +45,15 @@ for table in tables:
     total_cols=len(df.axes[1])
     
     for row in range(total_rows):
-        for col in ["name","sis_id", "sis_name"]:
+        for col in t_config.keys():
             # Split the module from the funciton name
             mod_name, func_name = t_config.get(col).rsplit('.', 1)
             # Faker has no parameters
             if "faker" in mod_name:
-                logger.info("Transforming with Faker")
+                logger.debug("Transforming with Faker")
                 df.at[row, col] = getattr(locals().get(mod_name), func_name)()
             elif "ffx" in mod_name:
-                logger.info("Transforming with FFX")
-                df.at[row, col] = getattr(locals().get(mod_name), func_name)(df.at[row,col])
+                logger.debug("Transforming with FFX")
+                df.at[row, col] = getattr(locals().get(mod_name), func_name)(df.at[row,col], prefix=UDW_PREFIX)
 
 logger.info(df)

@@ -1,11 +1,11 @@
 {
     "user": {
-        "id": "ffx.prefix",
+        "id": "ffx.encrypt",
         "name": "faker.name",
         "sis_id": "ffx.encrypt",
         "sis_name": "ffx.encrypt",
-        "course_id": "ffx.prefix",
-        "current_grade": "ffx.noprefix",
-        "final_grade": "ffx.noprefix"
+        "course_id": "ffx.encrypt",
+        "current_grade": "ffx.encrypt",
+        "final_grade": "ffx.encrypt"
     }
 }
