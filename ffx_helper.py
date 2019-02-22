@@ -19,7 +19,6 @@ class FFXEncrypt():
 
     #Encrypt with FFX!
     # TODO: Handle Decimals (probably just convert to full int and ffx each part)
-    # TODO: Detect if it's all upper/lower or mixed case to determine correct alphabet
     def encrypt(self, val, prefix: str=''):
         # First just convert to string
         try:
@@ -38,7 +37,14 @@ class FFXEncrypt():
                 e = pyffx.Integer(self.ffx_secret, length=vlen)
                 val = int(val)
             else:
-                e = pyffx.String(self.ffx_secret, alphabet=string.ascii_letters, length=vlen)
+                # Test if lowercase or uppercase or mixed
+                if val.islower():
+                    e = pyffx.String(self.ffx_secret, alphabet=string.ascii_lowercase, length=vlen)
+                elif val.isupper():
+                    e = pyffx.String(self.ffx_secret, alphabet=string.ascii_uppercase, length=vlen)
+                else:
+                    e = pyffx.String(self.ffx_secret, alphabet=string.ascii_letters, length=vlen)
+
             enc = e.encrypt(val)
             logger.debug(f"Out val {enc}")
             # If the prefix and val are both numbers put the prefix in the front
