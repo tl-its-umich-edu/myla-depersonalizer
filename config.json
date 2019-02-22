@@ -1,4 +1,26 @@
 {
+    "academic_terms": {
+        "id": "None",
+        "canvas_id": "None",
+        "name": "None",
+        "date_start": "None",
+        "date_end": "None"
+    },
+    "course": {
+        "id": "ffx.encrypt",
+        "canvas_id": "ffx.encrypt",
+        "term_id": "None",
+        "name": "None"
+    },
+    "file_access": {
+        "file_id": "ffx.encrypt",
+        "user_id": "ffx.encrypt"
+    },
+    "file": {
+        "id": "ffx.encrypt",
+        "name": "faker.file_name",
+        "course_id": "ffx.encrypt"
+    },
     "user": {
         "id": "ffx.encrypt",
         "name": "faker.name",
@@ -7,5 +29,49 @@
         "course_id": "ffx.encrypt",
         "current_grade": "ffx.encrypt",
         "final_grade": "ffx.encrypt"
+    },
+    "assignment_groups": {
+        "id": "ffx.encrypt",
+        "name": "TODO",
+        "weight": "TODO",
+        "group_points": "ffx.encrypt", 
+        "course_id": "ffx.encrypt",
+        "drop_lowest": "TODO",
+        "drop_highest": "TODO"
+    },
+    "assignment": {
+        "id": "ffx.encrypt",
+        "name": "TODO",
+        "due_date": "TODO",
+        "local_date": "TODO",
+        "points_possible": "ffx.encrypt",
+        "course_id": "ffx.encrypt",
+        "assignment_group_id": "ffx.encrypt"
+    },
+    "submission": {
+        "id": "ffx.encrypt",
+        "assignment_id": "ffx.encrypt",
+        "course_id": "ffx.encrypt",
+        "user_id": "ffx.encrypt",
+        "score": "ffx.encrypt",
+        "graded_date": "TODO",
+        "avg_score": "TODO"
+    },
+    "assignment_weight_consideration": {
+        "course_id": "ffx.encrypt",
+        "consider_weight": "TODO"
+    },
+    "course_view_option": {
+        "course_id": "ffx.encrypt",
+        "show_files_accessed": "TODO",
+        "show_assignment_planning": "TODO",
+        "show_grade_distribution": "TODO"
+    },
+    "user_default_selection": {
+        "id": "ffx.encrypt",
+        "course_id": "ffx.encrypt",
+        "user_id": "ffx.encrypt",
+        "default_view_type": "TODO",
+        "default_view_value": "TODO"
     }
 }

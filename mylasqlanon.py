@@ -38,7 +38,9 @@ conn = create_engine(f"mysql://{config('MYSQL_USER')}:{config('MYSQL_PASSWORD')}
 faker = Faker()
 ffx = FFXEncrypt(FFX_SECRET)
 
+logger.info(f"Found table {tables}")
 for table in tables:
+    logger.info(f"Processing {table}")
     t_config = (db_config.get(table))
     df = pd.read_sql(f"SELECT * from {table}", conn)
     total_rows=len(df.axes[0])
@@ -46,14 +48,18 @@ for table in tables:
     
     for row in range(total_rows):
         for col in t_config.keys():
-            # Split the module from the funciton name
-            mod_name, func_name = t_config.get(col).rsplit('.', 1)
+            # Split the module from the function name
+            mod_name, func_name = (t_config.get(col).rsplit('.', 1) + [None] * 2)[:2]
+            if "None" in mod_name:
+                logger.debug (f"No change indicated for {row} {col}")
             # Faker has no parameters
-            if "faker" in mod_name:
+            elif "faker" in mod_name:
                 logger.debug("Transforming with Faker")
                 df.at[row, col] = getattr(locals().get(mod_name), func_name)()
             elif "ffx" in mod_name:
                 logger.debug("Transforming with FFX")
                 df.at[row, col] = getattr(locals().get(mod_name), func_name)(df.at[row,col], prefix=UDW_PREFIX)
+            elif "TODO" in "mod_name":
+                logger.info(f"{row} {col} marked with TODO, skipping")
 
-logger.info(df)
+    logger.info(df)
