@@ -12,7 +12,7 @@ class TestAnon(unittest.TestCase):
     def setUpClass(cls):
         cls.ffx = FFXEncrypt(b"testpass")
     def test_ffx_encrypt(self):
-        self.assertEqual(self.ffx.encrypt("ABC"), 'Vcn')
+        self.assertEqual(self.ffx.encrypt("ABC"), 'FCG')
     def test_ffx_prefix(self):
         self.assertEqual(str(self.ffx.encrypt(123456, 123)), '123'+str(self.ffx.encrypt(456)))
         # Test if no prefix found
@@ -21,6 +21,10 @@ class TestAnon(unittest.TestCase):
         #995 encrypts to 68, it should be padded with a prefix
         self.assertEqual(self.ffx.encrypt(995), 68)
         self.assertEqual(self.ffx.encrypt(9995, 9), 9068)
+    def test_ffx_font_case(self):
+        self.assertEqual(self.ffx.encrypt("something"), "vdnovqovo")
+        self.assertEqual(self.ffx.encrypt("someTHing"), "cLxUGFKus")
+        self.assertEqual(self.ffx.encrypt("SOMETHING"), "VDNOVQOVO")
 
 if __name__ == '__main__':
     unittest.main()
