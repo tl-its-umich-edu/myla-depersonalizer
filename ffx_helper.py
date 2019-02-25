@@ -42,7 +42,7 @@ class FFXEncrypt():
             else: # Either String or Decimal
                 val = str(val)
                 try: # If val is decimal 
-                    fl = float(val)  
+                    fl = float(val) # Test if val is a valid decimal, otherwise val is not a numeric value
                     if 'E' in val or 'e' in val: # If val is in scientific notation
                         val = str(fl)
 
