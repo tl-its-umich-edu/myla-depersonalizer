@@ -18,7 +18,6 @@ class FFXEncrypt():
         return count, v
 
     #Encrypt with FFX!
-    # TODO: Handle Decimals (probably just convert to full int and ffx each part)
     def encrypt(self, val, prefix: str=''):
         # First just convert to string
         try:
@@ -45,7 +44,7 @@ class FFXEncrypt():
                 try: # If val is decimal   
                     fl = float(val)
                     neg = False
-                    num = ""
+                    enc = ""
                     
                     if val.startswith('-'):
                         val = val[1:]
@@ -56,10 +55,10 @@ class FFXEncrypt():
                         first_encrypt = ""
                         second_encrypt = ""
                         
-                        if first != "":
+                        if first != "" and first.isdigit():
                             e_1 = pyffx.Integer(self.ffx_secret, length=len(first))
                             first_encrypt = e_1.encrypt(first)
-                        if second != "": # Do we want to preserve 0.000 ? or just 0.0
+                        if second != "" and second.isdigit():
                             e_2 = pyffx.Integer(self.ffx_secret, length=len(second))
                             second_encrypt = e_2.encrypt(second)
                         enc = '.'.join([str(first_encrypt), str(second_encrypt)])
