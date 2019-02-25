@@ -34,7 +34,8 @@ class TestAnon(unittest.TestCase):
         self.assertEqual(self.ffx.encrypt('-.567'), '-.909')
         self.assertEqual(self.ffx.encrypt('-12.567'), '-14.909')
         self.assertEqual(self.ffx.encrypt('6.000'), '8.779')
-        self.assertEqual(self.ffx.encrypt('1.23E-2'), '-14.')
+        self.assertEqual(self.ffx.encrypt('1.23E-2'), '2.8479')
+        self.assertEqual(self.ffx.encrypt('-1.23e2'), '-453.2')
 
 
 if __name__ == '__main__':

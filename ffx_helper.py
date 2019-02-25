@@ -41,8 +41,11 @@ class FFXEncrypt():
                 return int(prefix + str(enc).zfill(vlen))
             else: # Either String or Decimal
                 val = str(val)
-                try: # If val is decimal   
-                    fl = float(val)
+                try: # If val is decimal 
+                    fl = float(val)  
+                    if 'E' in val or 'e' in val: # If val is in scientific notation
+                        val = str(fl)
+
                     neg = False
                     enc = ""
                     
