@@ -33,26 +33,54 @@ class FFXEncrypt():
             # So ffx_encrypt(1123, 1) will return the same postfix as ffx_encrypt(123)
             vlen = len(val)
             logger.debug(f"In val {val}")
-            if val.isdigit():
+            if val.isdigit(): # If val is Integer
                 e = pyffx.Integer(self.ffx_secret, length=vlen)
                 val = int(val)
-            else:
-                # Test if lowercase or uppercase or mixed
-                if val.islower():
-                    e = pyffx.String(self.ffx_secret, alphabet=string.ascii_lowercase, length=vlen)
-                elif val.isupper():
-                    e = pyffx.String(self.ffx_secret, alphabet=string.ascii_uppercase, length=vlen)
-                else:
-                    e = pyffx.String(self.ffx_secret, alphabet=string.ascii_letters, length=vlen)
-
-            enc = e.encrypt(val)
-            logger.debug(f"Out val {enc}")
-            # If the prefix and val are both numbers put the prefix in the front
-            if type(val) is int:
+                enc = e.encrypt(val)
                 # Return it as an int
+                # If the prefix and val are both numbers put the prefix in the front
                 return int(prefix + str(enc).zfill(vlen))
-            # Return it as a string
-            return prefix + enc
+            else: # Either String or Decimal
+                val = str(val)
+                try: # If val is decimal   
+                    fl = float(val)
+                    neg = False
+                    num = ""
+                    
+                    if val.startswith('-'):
+                        val = val[1:]
+                        neg = True
+                    
+                    if '.' in val:
+                        first, second = val.split('.')
+                        first_encrypt = ""
+                        second_encrypt = ""
+                        
+                        if first != "":
+                            e_1 = pyffx.Integer(self.ffx_secret, length=len(first))
+                            first_encrypt = e_1.encrypt(first)
+                        if second != "": # Do we want to preserve 0.000 ? or just 0.0
+                            e_2 = pyffx.Integer(self.ffx_secret, length=len(second))
+                            second_encrypt = e_2.encrypt(second)
+                        enc = '.'.join([str(first_encrypt), str(second_encrypt)])
+                    
+                    if neg:
+                        enc = '-' + str(enc)
+
+                except: # If val is String
+                    # Test if lowercase or uppercase or mixed
+                    if val.islower():
+                        e = pyffx.String(self.ffx_secret, alphabet=string.ascii_lowercase, length=vlen)
+                    elif val.isupper():
+                        e = pyffx.String(self.ffx_secret, alphabet=string.ascii_uppercase, length=vlen)
+                    else:
+                        e = pyffx.String(self.ffx_secret, alphabet=string.ascii_letters, length=vlen)
+                    enc = e.encrypt(val)
+
+                logger.debug(f"Out val {enc}")  
+                # Return it as a string 
+                return prefix + enc
+            
         except Exception as e:
             logger.warn(f"Cannot encrypt {val} {type(val)}")
             return val

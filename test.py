@@ -25,6 +25,14 @@ class TestAnon(unittest.TestCase):
         self.assertEqual(self.ffx.encrypt("something"), "vdnovqovo")
         self.assertEqual(self.ffx.encrypt("someTHing"), "cLxUGFKus")
         self.assertEqual(self.ffx.encrypt("SOMETHING"), "VDNOVQOVO")
+    def test_ffx_decimal(self):
+        self.assertEqual(self.ffx.encrypt(10.123), '73.453')
+        self.assertEqual(self.ffx.encrypt(0.123), '2.453')
+        self.assertEqual(self.ffx.encrypt(.567), '2.909')
+        self.assertEqual(self.ffx.encrypt(-100.0), '-79.2')
+        self.assertEqual(self.ffx.encrypt(23.55), '82.34')
+        self.assertEqual(self.ffx.encrypt(-.567), '-2.909')
+        self.assertEqual(self.ffx.encrypt(-12.567), '-14.909')
 
 if __name__ == '__main__':
     unittest.main()
