@@ -1,6 +1,6 @@
 import pyffx
 
-import string, logging
+import string, logging, sys
 
 from autologging import logged, traced
 
@@ -17,30 +17,31 @@ class FFXEncrypt():
         v = s.replace(old, new, max)
         return count, v
 
-    #Encrypt with FFX!
-    def encrypt(self, val, prefix: str=''):
-        # First just convert to string
+    def encrypt(self, val, addition: int = sys.maxsize):
+        """ Encrypt a value with FFX library
+        :param val: Vaule to encrypt
+        :type val: Either an integer, a string or a floating point number (represented as a string)
+        :param addition: Value added to an integer number, which will be subtracted first, defaults to sys.maxsize
+        :param addition: int, optional
+        :return: Encrypted number fitting same format as input
+        :rtype: Either an int or a string depending on what was passed in
+        """
+        n_val = 0
         try:
-            val = str(val)
-            if prefix:
-                prefix = str(prefix)
-                (replace_count, val) = self.count_replace(val, prefix, '', 1)
-                # If there was no prefix count, just remove the prefix
-                if replace_count == 0:
-                    prefix = ''
-            # Length of the string without the prefix
-            # So ffx_encrypt(1123, 1) will return the same postfix as ffx_encrypt(123)
-            vlen = len(val)
-            logger.debug(f"In val {val}")
-            if val.isdigit(): # If val is Integer
-                e = pyffx.Integer(self.ffx_secret, length=vlen)
+            # Strings that are integers should just be int
+            if isinstance(val, str) and val.isdigit():
                 val = int(val)
+            if isinstance(val, int): # If val is Integer
+                # If there's an addition do the new calculation
+                n_val = val - addition
+                logger.debug(f"n_val = {n_val}")
+                if n_val > 0:
+                   val = n_val
+                e = pyffx.Integer(self.ffx_secret, length=len(str(val)))
                 enc = e.encrypt(val)
-                # Return it as an int
-                # If the prefix and val are both numbers put the prefix in the front
-                return int(prefix + str(enc).zfill(vlen))
             else: # Either String or Decimal
                 val = str(val)
+                vlen = len(val)
                 try: # If val is decimal 
                     fl = float(val) # Test if val is a valid decimal, otherwise val is not a numeric value
                     if 'E' in val or 'e' in val: # If val is in scientific notation
@@ -69,7 +70,7 @@ class FFXEncrypt():
                     if neg:
                         enc = '-' + str(enc)
 
-                except: # If val is String
+                except ValueError: # If val is String, the first float cast will throw a ValueError
                     # Test if lowercase or uppercase or mixed
                     if val.islower():
                         e = pyffx.String(self.ffx_secret, alphabet=string.ascii_lowercase, length=vlen)
@@ -79,10 +80,11 @@ class FFXEncrypt():
                         e = pyffx.String(self.ffx_secret, alphabet=string.ascii_letters, length=vlen)
                     enc = e.encrypt(val)
 
-                logger.debug(f"Out val {enc}")  
-                # Return it as a string 
-                return prefix + enc
-            
+            logger.debug(f"Out val {enc}")  
+            # Return it as a string 
+            if isinstance(val, int) and n_val > 0:
+                enc += addition
+            return enc
         except Exception as e:
-            logger.warn(f"Cannot encrypt {val} {type(val)}")
+            logger.exception(f"Cannot encrypt {val} {type(val)}")
             return val

@@ -28,7 +28,7 @@ with open(this_dir + "/config.json") as json_data:
 tables = db_config.keys()
 
 # Get the prefix and secret to use with FFX
-UDW_PREFIX = config("UDW_ID_PREFIX", cast=str)
+ID_ADDITION = config("ID_ADDITION", cast=int, default=0)
 FFX_SECRET = config("FFX_SECRET", cast=str, default="").encode()
 
 # Connect up to the database
@@ -58,7 +58,7 @@ for table in tables:
                 df.at[row, col] = getattr(locals().get(mod_name), func_name)()
             elif "ffx" in mod_name:
                 logger.debug("Transforming with FFX")
-                df.at[row, col] = getattr(locals().get(mod_name), func_name)(df.at[row,col], prefix=UDW_PREFIX)
+                df.at[row, col] = getattr(locals().get(mod_name), func_name)(df.at[row,col], addition=ID_ADDITION)
             elif "TODO" in "mod_name":
                 logger.info(f"{row} {col} marked with TODO, skipping")
 
