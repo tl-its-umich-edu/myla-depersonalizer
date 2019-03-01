@@ -1,7 +1,8 @@
 # This script reads from a MySQL server the table structure and based on the configuration file (config.json) returns encrypted/anonymized data
-import os, logging, sys, json
+import os, logging, sys, json, hashlib
 
 from faker import Faker
+from faker.providers import BaseProvider
 
 from dotenv import load_dotenv
 from decouple import config, Csv
@@ -10,8 +11,6 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 from ffx_helper import FFXEncrypt
-
-import hashlib
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
@@ -43,9 +42,27 @@ def hashStringToInt(s, length):
     return int(hashlib.sha1(s.encode('utf-8')).hexdigest(), 16) % (10 ** length)
 
 # Setup the faker variable
-seed = hashStringToInt(FFX_SECRET, FAKER_SEED_LENGTH)
+# Faker provider for assignment
+class AssignmentProvider(BaseProvider):
+    def assignment(self):
+        # Fake class list
+        classes = [
+            'Reading',
+            'Video',
+            'Practice',
+            'Random',
+            'English',
+            'Archtecture',
+            'Information'
+        ]
+        num = self.random_number(digits=3)
+        clas = self.random_element(elements=(*classes,))
+        return '{0} Assignment #{1}'.format(clas, num)
+
 faker = Faker()
-faker.seed(seed)
+faker.seed(hashStringToInt(FFX_SECRET, FAKER_SEED_LENGTH))   
+faker.add_provider(AssignmentProvider)
+
 ffx = FFXEncrypt(FFX_SECRET)
 
 logger.info(f"Found table {tables}")
