@@ -11,6 +11,8 @@ from sqlalchemy import create_engine
 
 from ffx_helper import FFXEncrypt
 
+from faker.providers import BaseProvider
+
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
 
@@ -35,7 +37,25 @@ FFX_SECRET = config("FFX_SECRET", cast=str, default="").encode()
 conn = create_engine(f"mysql://{config('MYSQL_USER')}:{config('MYSQL_PASSWORD')}@{config('MYSQL_HOST')}:{config('MYSQL_PORT')}/{config('MYSQL_DATABASE')}?charset=utf8")
 
 # Setup the faker variable
-faker = Faker()
+# Faker provider for assignment
+class AssignmentProvider(BaseProvider):
+    def assignment(self):
+        # Fake class list
+        classes = [
+            'Reading',
+            'Video',
+            'Practice',
+            'Random',
+            'English',
+            'Archtecture',
+            'Information'
+        ]
+        num = self.random_number(digits=3)
+        clas = self.random_element(elements=(*classes,))
+        return '{0} Assignment #{1}'.format(clas, num)
+
+faker = Faker()    
+faker.add_provider(AssignmentProvider)
 ffx = FFXEncrypt(FFX_SECRET)
 
 logger.info(f"Found table {tables}")
