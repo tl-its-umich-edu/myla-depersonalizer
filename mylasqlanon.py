@@ -30,7 +30,7 @@ tables = db_config.keys()
 
 # Get the prefix and secret to use with FFX
 ID_ADDITION = config("ID_ADDITION", cast=int, default=0)
-FFX_SECRET = config("FFX_SECRET", cast=str, default="").encode()
+FFX_SECRET = config("FFX_SECRET", cast=str, default="")
 
 # Connect up to the database
 conn = create_engine(f"mysql://{config('MYSQL_USER')}:{config('MYSQL_PASSWORD')}@{config('MYSQL_HOST')}:{config('MYSQL_PORT')}/{config('MYSQL_DATABASE')}?charset=utf8")
@@ -63,6 +63,7 @@ faker = Faker()
 faker.seed(hashStringToInt(FFX_SECRET, FAKER_SEED_LENGTH))   
 faker.add_provider(AssignmentProvider)
 
+# This needs the string FFX_SECRET byte encoded
 ffx = FFXEncrypt(FFX_SECRET)
 
 logger.info(f"Found table {tables}")

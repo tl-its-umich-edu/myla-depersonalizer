@@ -41,7 +41,7 @@
     },
     "assignment": {
         "id": "ffx.encrypt",
-        "name": "TODO",
+        "name": "faker.assignment",
         "due_date": "TODO",
         "local_date": "TODO",
         "points_possible": "ffx.encrypt",

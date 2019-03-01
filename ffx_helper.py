@@ -10,6 +10,8 @@ logger = logging.getLogger()
 class FFXEncrypt():
 
     def __init__(self, ffx_secret: str):
+        if isinstance(ffx_secret, str):
+            ffx_secret = ffx_secret.encode()
         self.ffx_secret = ffx_secret
 
     def count_replace(self, s: str, old: str, new: str, max: int) -> (int, str):
