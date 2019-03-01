@@ -90,4 +90,4 @@ for table in tables:
             elif "TODO" in "mod_name":
                 logger.info(f"{row} {col} marked with TODO, skipping")
 
-    logger.info(df)
+    logger.info(df.to_csv())
