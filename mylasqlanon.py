@@ -11,6 +11,8 @@ from sqlalchemy import create_engine
 
 from ffx_helper import FFXEncrypt
 
+import hashlib
+
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
 
@@ -34,8 +36,16 @@ FFX_SECRET = config("FFX_SECRET", cast=str, default="").encode()
 # Connect up to the database
 conn = create_engine(f"mysql://{config('MYSQL_USER')}:{config('MYSQL_PASSWORD')}@{config('MYSQL_HOST')}:{config('MYSQL_PORT')}/{config('MYSQL_DATABASE')}?charset=utf8")
 
+FAKER_SEED_LENGTH = config("FAKER_SEED_LENGTH", cast=int, default=0)
+
+# Hash 
+def hashStringToInt(s, length):
+    return int(hashlib.sha1(s.encode('utf-8')).hexdigest(), 16) % (10 ** length)
+
 # Setup the faker variable
+seed = hashStringToInt(FFX_SECRET, FAKER_SEED_LENGTH)
 faker = Faker()
+faker.seed(seed)
 ffx = FFXEncrypt(FFX_SECRET)
 
 logger.info(f"Found table {tables}")
