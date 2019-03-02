@@ -10,7 +10,7 @@ logging.basicConfig(level=os.getenv("log_level", "TRACE"))
 class TestAnon(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.ffx = FFXEncrypt(b"testpass")
+        cls.ffx = FFXEncrypt("testpass")
     def test_ffx_encrypt(self):
         self.assertEqual(self.ffx.encrypt("ABC"), 'FCG')
     def test_ffx_prefix(self):
