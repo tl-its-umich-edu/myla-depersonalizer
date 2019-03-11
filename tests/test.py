@@ -51,13 +51,18 @@ class TestAnonymizer(unittest.TestCase):
         self.assertEqual(self.ffx.encrypt('123abc.456.bda123'), '453fcg.982.cle453')
     def test_assignment_custom(self):
         self.faker.seed(util_methods.hashStringToInt("testpass", 8))
+        # pylint: disable=no-member
         self.assertEqual(self.faker.assignment(),"Information Assignment #531")
+        # pylint: disable=no-member
         self.assertEqual(self.faker.assignment(),"Architecture Assignment #916")
 
     def test_date_time_on_date(self):
         self.faker.seed(util_methods.hashStringToInt("testpass", 8))
+        # pylint: disable=no-member
         self.assertEqual(self.faker.date_time_on_date(datetime.datetime(2019, 1, 1, 1, 1, 1)), datetime.datetime(2019, 1, 1, 18, 53, 31))
+
         # Adding the string case for date_time_on_date
+        # pylint: disable=no-member
         self.assertEqual(self.faker.date_time_on_date("2019-05-01 13:14:15"), datetime.datetime(2019, 5, 1, 12, 31, 18))
 
 if __name__ == '__main__':
