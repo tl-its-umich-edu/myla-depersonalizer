@@ -2,6 +2,7 @@ from faker.providers import BaseProvider
 from faker.providers import date_time
 
 from datetime import datetime
+from dateutil.parser import parse as date_parse
 
 # Setup the faker variable
 # Faker provider for assignment
@@ -23,9 +24,17 @@ class CustomProvider(BaseProvider):
 
     def date_time_on_date(self, date):
         """
-        Input: datetime
+        Input: datetime (or str that will be parsed)
         Output: datetime with a different time on the same date
         """
+
+        #Try to convert it from a string, if it can't be converted just return the value
+        try:
+            if isinstance(str, date):
+                date = date_parse(date)
+        except:
+            return date
+
         day = date.date()
         start = datetime(day.year, day.month, day.day)
         end = datetime(day.year, day.month, day.day, 23, 59, 59)

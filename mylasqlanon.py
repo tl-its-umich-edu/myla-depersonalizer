@@ -1,14 +1,14 @@
 # This script reads from a MySQL server the table structure and based on the configuration file (config.json) returns encrypted/anonymized data
-import os, logging, sys, json
+import os, logging, sys, json, inspect
 
 from faker import Faker
 from custom_provider import CustomProvider
-
 
 from dotenv import load_dotenv
 from decouple import config, Csv
 
 import pandas as pd
+import numpy as np
 from sqlalchemy import create_engine
 
 from ffx_helper import FFXEncrypt
@@ -28,7 +28,7 @@ with open(this_dir + "/config.json") as json_data:
     db_config = json.load(json_data)
     logger.info (db_config)
 
-# Get the tables to run based on they keys in the config
+# get the tables to run based on they keys in the config
 tables = db_config.keys()
 
 # Get the prefix and secret to use with FFX
@@ -64,10 +64,18 @@ for table in tables:
             # Faker has no parameters
             elif "faker" in mod_name:
                 logger.debug("Transforming with Faker")
-                df.at[row, col] = getattr(locals().get(mod_name), func_name)()
+                func = getattr(locals().get(mod_name), func_name)
+                if func_name == "date_time_on_date":
+                    df.at[row, col] = func(df.at[row,col])
+                else:
+                    df.at[row, col] = func()
             elif "ffx" in mod_name:
-                logger.debug("Transforming with FFX")
-                df.at[row, col] = getattr(locals().get(mod_name), func_name)(df.at[row,col], addition=ID_ADDITION)
+                try:
+                    logger.debug("Transforming with FFX")
+                    df.at[row, col] = getattr(locals().get(mod_name), func_name)(df.at[row,col], addition=ID_ADDITION)
+                except ValueError:
+                    logger.exception(f"Problem converting {df.at[row,col]}")
+                    logger.info(np.isnan(df.at[row,col]))
             elif "TODO" in "mod_name":
                 logger.info(f"{row} {col} marked with TODO, skipping")
 
