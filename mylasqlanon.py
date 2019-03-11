@@ -11,6 +11,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 from ffx_helper import FFXEncrypt
+from datetime import datetime
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
@@ -58,6 +59,16 @@ class AssignmentProvider(BaseProvider):
         num = self.random_number(digits=3)
         clas = self.random_element(elements=(*classes,))
         return '{0} Assignment #{1}'.format(clas, num)
+
+def date_time_on_date(date, faker):
+    """
+    Input: datetime
+    Output: datetime with a different time on the same date
+    """
+    day = date.date()
+    start = datetime(day.year, day.month, day.day)
+    end = datetime(day.year, day.month, day.day, 23,59,59)
+    return faker.date_time_between_dates(datetime_start=start, datetime_end=end)
 
 faker = Faker()
 faker.seed(hashStringToInt(FFX_SECRET, FAKER_SEED_LENGTH))   
