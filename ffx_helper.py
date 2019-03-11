@@ -54,7 +54,7 @@ class FFXEncrypt():
                         e = pyffx.Integer(self.ffx_secret, length=vlen)
                         temp = str(e.encrypt(elem))
                     elif elem.isalpha():
-                        # a-zA-Z
+                        # encrypt alphabet characters
                         if elem.islower():
                             e = pyffx.String(self.ffx_secret, alphabet=string.ascii_lowercase, length=vlen)
                         elif elem.isupper():
@@ -62,7 +62,7 @@ class FFXEncrypt():
                         else:
                             e = pyffx.String(self.ffx_secret, alphabet=string.ascii_letters, length=vlen)
                         temp = e.encrypt(elem)
-                    else: # special characters
+                    else: # Escape special characters
                         temp = elem
                     enc += str(temp)
 
