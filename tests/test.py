@@ -57,6 +57,8 @@ class TestAnonymizer(unittest.TestCase):
     def test_date_time_on_date(self):
         self.faker.seed(util_methods.hashStringToInt("testpass", 8))
         self.assertEqual(self.faker.date_time_on_date(datetime.datetime(2019, 1, 1, 1, 1, 1)), datetime.datetime(2019, 1, 1, 18, 53, 31))
+        # Adding the string case for date_time_on_date
+        self.assertEqual(self.faker.date_time_on_date("2019-05-01 13:14:15"), datetime.datetime(2019, 5, 1, 12, 31, 18))
 
 if __name__ == '__main__':
     unittest.main()

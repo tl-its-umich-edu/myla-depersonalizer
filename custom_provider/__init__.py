@@ -30,7 +30,7 @@ class CustomProvider(BaseProvider):
 
         #Try to convert it from a string, if it can't be converted just return the value
         try:
-            if isinstance(str, date):
+            if isinstance(date, str):
                 date = date_parse(date)
         except:
             return date
