@@ -1,8 +1,9 @@
 # This script reads from a MySQL server the table structure and based on the configuration file (config.json) returns encrypted/anonymized data
-import os, logging, sys, json, hashlib
+import os, logging, sys, json
 
 from faker import Faker
-from faker.providers import BaseProvider
+from custom_provider import CustomProvider
+
 
 from dotenv import load_dotenv
 from decouple import config, Csv
@@ -11,6 +12,8 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 from ffx_helper import FFXEncrypt
+
+import util_methods
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
@@ -37,31 +40,9 @@ conn = create_engine(f"mysql://{config('MYSQL_USER')}:{config('MYSQL_PASSWORD')}
 
 FAKER_SEED_LENGTH = config("FAKER_SEED_LENGTH", cast=int, default=0)
 
-# Hash 
-def hashStringToInt(s, length):
-    return int(hashlib.sha1(s.encode('utf-8')).hexdigest(), 16) % (10 ** length)
-
-# Setup the faker variable
-# Faker provider for assignment
-class AssignmentProvider(BaseProvider):
-    def assignment(self):
-        # Fake class list
-        classes = [
-            'Reading',
-            'Video',
-            'Practice',
-            'Random',
-            'English',
-            'Archtecture',
-            'Information'
-        ]
-        num = self.random_number(digits=3)
-        clas = self.random_element(elements=(*classes,))
-        return '{0} Assignment #{1}'.format(clas, num)
-
 faker = Faker()
-faker.seed(hashStringToInt(FFX_SECRET, FAKER_SEED_LENGTH))   
-faker.add_provider(AssignmentProvider)
+faker.seed(util_methods.hashStringToInt(FFX_SECRET, FAKER_SEED_LENGTH))   
+faker.add_provider(CustomProvider)
 
 # This needs the string FFX_SECRET byte encoded
 ffx = FFXEncrypt(FFX_SECRET)
