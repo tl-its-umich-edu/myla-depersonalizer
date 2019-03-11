@@ -30,8 +30,12 @@ class TestAnon(unittest.TestCase):
         self.assertEqual(self.ffx.encrypt('-.567'), '-.909')
         self.assertEqual(self.ffx.encrypt('-12.567'), '-14.909')
         self.assertEqual(self.ffx.encrypt('6.000'), '8.779')
-        self.assertEqual(self.ffx.encrypt('1.23E-2'), '2.8479')
-        self.assertEqual(self.ffx.encrypt('-1.23e2'), '-453.2')
+        self.assertEqual(self.ffx.encrypt('1.23E-2'), '3.82Q-4')
+        self.assertEqual(self.ffx.encrypt('-1.23e2'), '-3.82q4')
+    def test_ffx_special(self):
+        self.assertEqual(self.ffx.encrypt('test@example.com'), 'fjjs@qdhieex.lgs')
+        self.assertEqual(self.ffx.encrypt('test@@@@gmail.colll099m'), 'fjjs@@@@aibdq.whecu236y')
+        self.assertEqual(self.ffx.encrypt('123abc.456.bda123'), '453fcg.982.cle453')
 
 
 if __name__ == '__main__':
