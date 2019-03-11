@@ -1,16 +1,29 @@
-import unittest, logging, os
+import unittest, logging, os, sys
 
 from autologging import logged, traced
 
+# Add this path first so it picks up the newest changes without having to rebuild
+this_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, this_dir + "/..")
+
 from ffx_helper import FFXEncrypt
+from custom_provider import CustomProvider
+import util_methods
+
+import datetime
+
+from faker import Faker
 
 logging.basicConfig(level=os.getenv("log_level", "TRACE"))
 
 @logged
-class TestAnon(unittest.TestCase):
+class TestAnonymizer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ffx = FFXEncrypt("testpass")
+        cls.faker = Faker()
+        cls.faker.add_provider(CustomProvider)
+
     def test_ffx_encrypt(self):
         self.assertEqual(self.ffx.encrypt("ABC"), 'FCG')
     def test_ffx_prefix(self):
@@ -36,7 +49,14 @@ class TestAnon(unittest.TestCase):
         self.assertEqual(self.ffx.encrypt('test@example.com'), 'fjjs@qdhieex.lgs')
         self.assertEqual(self.ffx.encrypt('test@@@@gmail.colll099m'), 'fjjs@@@@aibdq.whecu236y')
         self.assertEqual(self.ffx.encrypt('123abc.456.bda123'), '453fcg.982.cle453')
+    def test_assignment_custom(self):
+        self.faker.seed(util_methods.hashStringToInt("testpass", 8))
+        self.assertEqual(self.faker.assignment(),"Information Assignment #531")
+        self.assertEqual(self.faker.assignment(),"Architecture Assignment #916")
 
+    def test_date_time_on_date(self):
+        self.faker.seed(util_methods.hashStringToInt("testpass", 8))
+        self.assertEqual(self.faker.date_time_on_date(datetime.datetime(2019, 1, 1, 1, 1, 1)), datetime.datetime(2019, 1, 1, 18, 53, 31))
 
 if __name__ == '__main__':
     unittest.main()
