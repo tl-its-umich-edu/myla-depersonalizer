@@ -36,7 +36,7 @@ ID_ADDITION = config("ID_ADDITION", cast=int, default=0)
 FFX_SECRET = config("FFX_SECRET", cast=str, default="")
 
 # Connect up to the database
-conn = create_engine(f"mysql://{config('MYSQL_USER')}:{config('MYSQL_PASSWORD')}@{config('MYSQL_HOST')}:{config('MYSQL_PORT')}/{config('MYSQL_DATABASE')}?charset=utf8")
+engine = create_engine(f"mysql://{config('MYSQL_USER')}:{config('MYSQL_PASSWORD')}@{config('MYSQL_HOST')}:{config('MYSQL_PORT')}/{config('MYSQL_DATABASE')}?charset=utf8")
 
 FAKER_SEED_LENGTH = config("FAKER_SEED_LENGTH", cast=int, default=0)
 
@@ -51,7 +51,7 @@ logger.info(f"Found table {tables}")
 for table in tables:
     logger.info(f"Processing {table}")
     t_config = (db_config.get(table))
-    df = pd.read_sql(f"SELECT * from {table}", conn)
+    df = pd.read_sql(f"SELECT * from {table}", engine)
     total_rows=len(df.axes[0])
     total_cols=len(df.axes[1])
     
@@ -81,6 +81,6 @@ for table in tables:
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):
-        util_methods.pandasDeleteAndInsert(table, df, conn)
+        util_methods.pandasDeleteAndInsert(table, df, engine)
 
     logger.info(df.to_csv())
