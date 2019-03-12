@@ -79,6 +79,8 @@ for table in tables:
             elif "TODO" in "mod_name":
                 logger.info(f"{row} {col} marked with TODO, skipping")
 
-    util_methods.pandasDeleteAndInsert(table, df, conn)
+    # If the database should be updated, call to update
+    if (config("UPDATE_DATABASE", cast=bool, default=False)):
+        util_methods.pandasDeleteAndInsert(table, df, conn)
 
     logger.info(df.to_csv())
