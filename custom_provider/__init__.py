@@ -1,8 +1,12 @@
+import logging
+
 from faker.providers import BaseProvider
 from faker.providers import date_time
 
 from datetime import datetime
 from dateutil.parser import parse as date_parse
+
+logger = logging.getLogger()
 
 # Setup the faker variable
 # Faker provider for assignment
@@ -32,10 +36,11 @@ class CustomProvider(BaseProvider):
         try:
             if isinstance(date, str):
                 date = date_parse(date)
-        except:
-            return date
+            day = date.date()
+            start = datetime(day.year, day.month, day.day)
+            end = datetime(day.year, day.month, day.day, 23, 59, 59)
+            return self.generator.date_time_between_dates(datetime_start=start, datetime_end=end)
 
-        day = date.date()
-        start = datetime(day.year, day.month, day.day)
-        end = datetime(day.year, day.month, day.day, 23, 59, 59)
-        return self.generator.date_time_between_dates(datetime_start=start, datetime_end=end)
+        except:
+            logger.warning(f"Exception for date of {date}, just returning original date")
+            return date
