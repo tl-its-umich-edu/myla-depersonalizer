@@ -2,6 +2,7 @@ import pyffx
 
 import string, logging, sys
 import re
+import numpy as np
 from autologging import logged, traced
 
 logger = logging.getLogger()
@@ -29,6 +30,10 @@ class FFXEncrypt():
         :rtype: Either an int or a string depending on what was passed in
         """
         n_val = 0
+        # If the value is none or if its numpy and nan then just return it
+        if val == None or (isinstance(val, np.float64) and np.isnan(val)):
+            return val
+
         try:
             # Strings that are integers should just be int
             if isinstance(val, str) and val.isdigit():
