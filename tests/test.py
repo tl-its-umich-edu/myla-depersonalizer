@@ -70,5 +70,13 @@ class TestAnonymizer(unittest.TestCase):
         self.assertEqual(self.faker.course(),"AUTO 296 006 FA 2073")
         self.assertEqual(self.faker.course(), "AUTO 273 007 SP 2026")
 
+    def test_resample(self):
+        # These will always be different values returnsd, just verify that the length is the same and they are within the original range
+        test_vals = [21, 129, 123, 94]
+        raw_sample, map_sample = util_methods.kde_resample(test_vals)
+        self.assertEqual(len(map_sample), 4)
+        self.assertTrue(min(test_vals) <= min(map_sample))
+        self.assertTrue(max(test_vals) >= max(map_sample))
+
 if __name__ == '__main__':
     unittest.main()

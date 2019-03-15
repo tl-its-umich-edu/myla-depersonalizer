@@ -1,7 +1,7 @@
 # Hash 
 
 import hashlib, logging
-
+import scipy.stats
 import pandas, sqlalchemy
 
 logger = logging.getLogger()
@@ -20,3 +20,16 @@ def pandasDeleteAndInsert(mysql_table: str, df: pandas.DataFrame, engine: sqlalc
     except Exception as e:
         logger.exception(f"Error running to_sql on table {mysql_table}")
         raise
+
+def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
+  kde = scipy.stats.gaussian_kde(orig_data, bw_method=bw_method)
+
+  # Generate data from kde
+  raw_sample = kde.resample(len(orig_data)).T[:,0]
+  
+  # Map the value into range if the user wants this (though it's a little slow)
+  if map_to_range:
+      map_sample = [int(((val - min(raw_sample)) * (max(orig_data) - min(orig_data))) / (max(raw_sample)
+        - min(raw_sample)) + min(orig_data)) for val in raw_sample]
+
+  return raw_sample, map_sample

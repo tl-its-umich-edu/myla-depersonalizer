@@ -30,6 +30,7 @@ with open(this_dir + "/config.json") as json_data:
 
 # get the tables to run based on they keys in the config
 tables = db_config.keys()
+tables = ['user',]
 
 # Get the prefix and secret to use with FFX
 ID_ADDITION = config("ID_ADDITION", cast=int, default=0)
@@ -51,10 +52,17 @@ logger.info(f"Found table {tables}")
 for table in tables:
     logger.info(f"Processing {table}")
     t_config = (db_config.get(table))
-    df = pd.read_sql(f"SELECT * from {table}", engine)
+    df = pd.read_sql(f"SELECT * from {table}", engine).infer_objects()
     total_rows=len(df.axes[0])
     total_cols=len(df.axes[1])
+
+    # First just go through the columns and look for column wide changes
+    for col in t_config.keys():
+        mod_name, func_name = (t_config.get(col).rsplit('.', 1) + [None] * 2)[:2]
+        if "redist" in mod_name:
+            print(df[col].describe())
     
+    # Now go through the rows and just look for cell specific changes
     for row in range(total_rows):
         for col in t_config.keys():
             # Split the module from the function name
@@ -78,6 +86,7 @@ for table in tables:
                     logger.info(np.isnan(df.at[row,col]))
             elif "TODO" in "mod_name":
                 logger.info(f"{row} {col} marked with TODO, skipping")
+            # else currently do nothing
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):
