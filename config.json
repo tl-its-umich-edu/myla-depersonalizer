@@ -25,7 +25,7 @@
         "id": "ffx.encrypt",
         "name": "faker.name",
         "sis_id": "ffx.encrypt",
-        "sis_name": "ffx.encrypt",
+        "sis_name": "faker.user_name",
         "course_id": "ffx.encrypt",
         "current_grade": "ffx.encrypt",
         "final_grade": "ffx.encrypt"
