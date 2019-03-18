@@ -25,25 +25,25 @@
         "id": "ffx.encrypt",
         "name": "faker.name",
         "sis_id": "ffx.encrypt",
-        "sis_name": "ffx.encrypt",
+        "sis_name": "faker.user_name",
         "course_id": "ffx.encrypt",
         "current_grade": "ffx.encrypt",
         "final_grade": "ffx.encrypt"
     },
     "assignment_groups": {
         "id": "ffx.encrypt",
-        "name": "TODO",
-        "weight": "TODO",
+        "name": "faker.assignment",
+        "weight": "ffx.encrypt",
         "group_points": "ffx.encrypt", 
         "course_id": "ffx.encrypt",
-        "drop_lowest": "TODO",
-        "drop_highest": "TODO"
+        "drop_lowest": "None",
+        "drop_highest": "None"
     },
     "assignment": {
         "id": "ffx.encrypt",
         "name": "faker.assignment",
-        "due_date": "TODO",
-        "local_date": "TODO",
+        "due_date": "faker.date_time_on_date",
+        "local_date": "faker.date_time_on_date",
         "points_possible": "ffx.encrypt",
         "course_id": "ffx.encrypt",
         "assignment_group_id": "ffx.encrypt"
@@ -54,24 +54,24 @@
         "course_id": "ffx.encrypt",
         "user_id": "ffx.encrypt",
         "score": "ffx.encrypt",
-        "graded_date": "TODO",
-        "avg_score": "TODO"
+        "graded_date": "faker.date_time_on_date",
+        "avg_score": "ffx.encrypt"
     },
     "assignment_weight_consideration": {
         "course_id": "ffx.encrypt",
-        "consider_weight": "TODO"
+        "consider_weight": "None"
     },
     "course_view_option": {
         "course_id": "ffx.encrypt",
-        "show_files_accessed": "TODO",
-        "show_assignment_planning": "TODO",
-        "show_grade_distribution": "TODO"
+        "show_files_accessed": "None",
+        "show_assignment_planning": "None",
+        "show_grade_distribution": "None"
     },
     "user_default_selection": {
         "id": "ffx.encrypt",
         "course_id": "ffx.encrypt",
         "user_id": "ffx.encrypt",
-        "default_view_type": "TODO",
-        "default_view_value": "TODO"
+        "default_view_type": "None",
+        "default_view_value": "None"
     }
 }
