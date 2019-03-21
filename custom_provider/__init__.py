@@ -56,4 +56,4 @@ class CustomProvider(BaseProvider):
             year = self.random_int(10,99)
             clas = self.random_element(elements=(*classList,))
             smst = self.random_element(elements=(*semester,))
-            return f"{clas} #{course_id} #00{session_id} {smst} 20{year}"
+            return f"{clas} {course_id} 00{session_id} {smst} 20{year}"

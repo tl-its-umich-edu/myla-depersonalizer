@@ -67,8 +67,8 @@ class TestAnonymizer(unittest.TestCase):
         
     def test_course_id(self):
         self.faker.seed(util_methods.hashStringToInt("testpass", 8))
-        self.assertEqual(self.faker.course(),"AUTO #631 #006 SP 2064")
-        self.assertEqual(self.faker.course(), "LATIN #270 #003 SP 2024")
+        self.assertEqual(self.faker.course(),"AUTO 631 006 SP 2064")
+        self.assertEqual(self.faker.course(), "LATIN 270 003 SP 2024")
 
 if __name__ == '__main__':
     unittest.main()
