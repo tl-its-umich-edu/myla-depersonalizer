@@ -24,7 +24,7 @@ class CustomProvider(BaseProvider):
         ]
         num = self.random_number(digits=3)
         clas = self.random_element(elements=(*classes,))
-        return '{0} Assignment #{1}'.format(clas, num)
+        return f'{clas} Assignment #{num}'
 
     def date_time_on_date(self, date):
         """
@@ -44,3 +44,16 @@ class CustomProvider(BaseProvider):
         except:
             logger.warning(f"Exception for date of {date}, just returning original date")
             return date
+
+        def course(self):
+            """
+            Generate course id
+            """
+            classList = ['GEOG', 'DENT', 'LATIN', 'SI', 'PHYSICS', 'AUTO', 'EECS']
+            semester = ['SP', 'SU', 'WN', 'FA']
+            course_id = self.random_int(100, 999)
+            session_id = self.random_int(1,9)
+            year = self.random_int(10,99)
+            clas = self.random_element(elements=(*classList,))
+            smst = self.random_element(elements=(*semester,))
+            return f"{clas} {course_id} 00{session_id} {smst} 20{year}"
