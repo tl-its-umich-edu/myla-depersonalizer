@@ -45,15 +45,15 @@ class CustomProvider(BaseProvider):
             logger.warning(f"Exception for date of {date}, just returning original date")
             return date
 
-        def course(self):
-            """
-            Generate course id
-            """
-            classList = ['GEOG', 'DENT', 'LATIN', 'SI', 'PHYSICS', 'AUTO', 'EECS']
-            semester = ['SP', 'SU', 'WN', 'FA']
-            course_id = self.random_int(100, 999)
-            session_id = self.random_int(1,9)
-            year = self.random_int(10,99)
-            clas = self.random_element(elements=(*classList,))
-            smst = self.random_element(elements=(*semester,))
-            return f"{clas} {course_id} 00{session_id} {smst} 20{year}"
+    def course(self):
+        """
+        Generate course id
+        """
+        classList = ['GEOG', 'DENT', 'LATIN', 'SI', 'PHYSICS', 'AUTO', 'EECS']
+        semester = ['SP', 'SU', 'WN', 'FA']
+        course_id = self.random_int(100, 999)
+        session_id = self.random_int(1,9)
+        year = self.random_int(10,99)
+        clas = self.random_element(elements=(*classList,))
+        smst = self.random_element(elements=(*semester,))
+        return f"{clas} {course_id} 00{session_id} {smst} 20{year}"
