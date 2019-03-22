@@ -64,6 +64,11 @@ class TestAnonymizer(unittest.TestCase):
         # Adding the string case for date_time_on_date
         # pylint: disable=no-member
         self.assertEqual(self.faker.date_time_on_date("2019-05-01 13:14:15"), datetime.datetime(2019, 5, 1, 12, 31, 18))
+        
+    def test_course_id(self):
+        self.faker.seed(util_methods.hashStringToInt("testpass", 8))
+        self.assertEqual(self.faker.course(),"AUTO 631 006 SP 2064")
+        self.assertEqual(self.faker.course(), "LATIN 270 003 SP 2024")
 
 if __name__ == '__main__':
     unittest.main()
