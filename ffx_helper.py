@@ -4,6 +4,7 @@ import string, logging, sys
 import re
 import numpy as np
 from autologging import logged, traced
+import random
 
 logger = logging.getLogger()
 
@@ -11,8 +12,13 @@ logger = logging.getLogger()
 class FFXEncrypt():
 
     def __init__(self, ffx_secret: str):
+        if len(ffx_secret) < 16:
+            logger.exception("The length of the secret should be longer than 16, a random key will be used.")
+            ffx_secret = ''.join(random.choices(string.ascii_lowercase, k=16))
+
         if isinstance(ffx_secret, str):
             ffx_secret = ffx_secret.encode()
+        
         self.ffx_secret = ffx_secret
 
     def count_replace(self, s: str, old: str, new: str, max: int) -> (int, str):
