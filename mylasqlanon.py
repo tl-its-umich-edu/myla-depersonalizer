@@ -29,8 +29,10 @@ with open(this_dir + "/config.json") as json_data:
     logger.info (db_config)
 
 # get the tables to run based on they keys in the config
-tables = db_config.keys()
-#tables = ['user',]
+tables = config("TABLES", cast=Csv(), default="")
+# If the user doesn't specify specific tables just run them all
+if not(tables):
+    tables = db_config.keys()
 
 # Get the prefix and secret to use with FFX
 ID_ADDITION = config("ID_ADDITION", cast=int, default=0)
@@ -61,6 +63,7 @@ for table in tables:
         mod_name, index_name = (t_config.get(col).rsplit('.', 1) + [None] * 2)[:2]
         if "redist" in mod_name:
             # If it gets here it has to be numeric
+            logger.debug(f"{index_name} {col}")
             df[col] = pd.to_numeric(df[col])
             df[col].fillna(value=0, inplace=True)
             df[col] = df.groupby([index_name])[col].transform(lambda x: util_methods.kde_resample(x))
