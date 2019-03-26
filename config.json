@@ -1,77 +1,77 @@
 {
-    "academic_terms": {
-        "id": "None",
-        "canvas_id": "None",
-        "name": "None",
-        "date_start": "None",
-        "date_end": "None"
-    },
-    "course": {
-        "id": "ffx.encrypt",
-        "canvas_id": "ffx.encrypt",
-        "term_id": "None",
-        "name": "None"
-    },
-    "file_access": {
-        "file_id": "ffx.encrypt",
-        "user_id": "ffx.encrypt"
-    },
-    "file": {
-        "id": "ffx.encrypt",
-        "name": "faker.file_name",
-        "course_id": "ffx.encrypt"
-    },
-    "user": {
-        "id": "ffx.encrypt",
-        "name": "faker.name",
-        "sis_id": "ffx.encrypt",
-        "sis_name": "faker.user_name",
-        "course_id": "ffx.encrypt",
-        "current_grade": "redist.course_id",
-        "final_grade": "redist.course_id"
-    },
-    "assignment_groups": {
-        "id": "ffx.encrypt",
-        "name": "faker.assignment",
-        "weight": "redist.course_id",
-        "group_points": "redist.course_id", 
-        "course_id": "ffx.encrypt",
-        "drop_lowest": "None",
-        "drop_highest": "None"
-    },
-    "assignment": {
-        "id": "ffx.encrypt",
-        "name": "faker.assignment",
-        "due_date": "faker.date_time_on_date",
-        "local_date": "faker.date_time_on_date",
-        "points_possible": "redist.course_id",
-        "course_id": "ffx.encrypt",
-        "assignment_group_id": "ffx.encrypt"
-    },
-    "submission": {
-        "id": "ffx.encrypt",
-        "assignment_id": "ffx.encrypt",
-        "course_id": "ffx.encrypt",
-        "user_id": "ffx.encrypt",
-        "score": "ffx.encrypt",
-        "graded_date": "faker.date_time_on_date",
-        "avg_score": "redist.course_id"
-    },
-    "assignment_weight_consideration": {
-        "course_id": "ffx.encrypt",
-        "consider_weight": "None"
-    },
-    "course_view_option": {
-        "course_id": "ffx.encrypt",
-        "show_files_accessed": "None",
-        "show_assignment_planning": "None",
-        "show_grade_distribution": "None"
-    },
-    "user_default_selection": {
-        "id": "ffx.encrypt",
-        "course_id": "ffx.encrypt",
-        "user_id": "ffx.encrypt",
-        "default_view_type": "None",
-        "default_view_value": "None"
-    }
+    "academic_terms": [
+        {"name": "id", "method": "None"},
+        {"name": "canvas_id", "method": "None"},
+        {"name": "name", "method": "None"},
+        {"name": "date_start", "method": "None"},
+        {"name": "date_end", "method": "None"}
+    ],
+    "course": [
+        {"name": "id", "method": "ffx.encrypt"},
+        {"name": "canvas_id", "method": "ffx.encrypt"},
+        {"name": "term_id", "method": "None"},
+        {"name": "name", "method": "faker.course"}
+    ],
+    "file_access": [
+        {"name": "file_id", "method": "ffx.encrypt"},
+        {"name": "user_id", "method": "ffx.encrypt"}
+    ],
+    "file": [
+        {"name": "id", "method": "ffx.encrypt"},
+        {"name": "name", "method": "faker.file_name"},
+        {"name": "course_id", "method": "ffx.encrypt"}
+    ],
+    "user": [
+        {"name": "id", "method": "ffx.encrypt"},
+        {"name": "name", "method": "faker.name"},
+        {"name": "sis_id", "method": "ffx.encrypt"},
+        {"name": "sis_name", "method": "faker.user_name"},
+        {"name": "course_id", "method": "ffx.encrypt"},
+        {"name": "current_grade", "method": "redist.course_id"},
+        {"name": "final_grade", "method": "redist.course_id"}
+    ],
+    "assignment_groups": [
+        {"name": "id", "method": "ffx.encrypt"},
+        {"name": "name", "method": "faker.assignment"},
+        {"name": "weight", "method": "redist.course_id"},
+        {"name": "group_points", "method": "redist.course_id"}, 
+        {"name": "course_id", "method": "ffx.encrypt"},
+        {"name": "drop_lowest", "method": "None"},
+        {"name": "drop_highest", "method": "None"}
+    ],
+    "assignment": [
+        {"name": "id", "method": "ffx.encrypt"},
+        {"name": "name", "method": "faker.assignment"},
+        {"name": "due_date", "method": "faker.date_time_on_date"},
+        {"name": "local_date", "method": "faker.date_time_on_date"},
+        {"name": "points_possible", "method": "redist.course_id"},
+        {"name": "course_id", "method": "ffx.encrypt"},
+        {"name": "assignment_group_id", "method": "ffx.encrypt"}
+    ],
+    "submission": [
+        {"name": "id", "method": "ffx.encrypt"},
+        {"name": "assignment_id", "method": "ffx.encrypt"},
+        {"name": "course_id", "method": "ffx.encrypt"},
+        {"name": "user_id", "method": "ffx.encrypt"},
+        {"name": "score", "method": "ffx.encrypt"},
+        {"name": "graded_date", "method": "faker.date_time_on_date"},
+        {"name": "avg_score", "method": "mean.score__assignment_id"}
+    ],
+    "assignment_weight_consideration": [
+        {"name": "course_id", "method": "ffx.encrypt"},
+        {"name": "consider_weight", "method": "None"}
+    ],
+    "course_view_option": [
+        {"name": "course_id", "method": "ffx.encrypt"},
+        {"name": "show_files_accessed", "method": "None"},
+        {"name": "show_assignment_planning", "method": "None"},
+        {"name": "show_grade_distribution", "method": "None"}
+    ],
+    "user_default_selection": [
+        {"name": "id", "method": "ffx.encrypt"},
+        {"name": "course_id", "method": "ffx.encrypt"},
+        {"name": "user_id", "method": "ffx.encrypt"},
+        {"name": "default_view_type", "method": "None"},
+        {"name": "default_view_value", "method": "None"}
+    ]
 }
