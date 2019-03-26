@@ -30,7 +30,7 @@ with open(this_dir + "/config.json") as json_data:
 
 # get the tables to run based on they keys in the config
 tables = db_config.keys()
-tables = ['user',]
+#tables = ['user',]
 
 # Get the prefix and secret to use with FFX
 ID_ADDITION = config("ID_ADDITION", cast=int, default=0)
@@ -63,14 +63,7 @@ for table in tables:
             # If it gets here it has to be numeric
             df[col] = pd.to_numeric(df[col])
             df[col].fillna(value=0, inplace=True)
-            # It was suggested something like this might replace all of this but I can't get it to work!
-            #df[col] = df.groupby([index_name])[col].transform(lambda x: kde_resample(x))
-            grouped = df.groupby(index_name)
-            for name, group in grouped:
-                grades = group.get(col)
-                raw_new_grades, map_new_grades = util_methods.kde_resample(grades.values)
-                for (g_index, g_value), new_grade in zip(grades.iteritems(), map_new_grades):
-                    df.at[g_index, col] = new_grade
+            df[col] = df.groupby([index_name])[col].transform(lambda x: util_methods.kde_resample(x))
     
     # Now go through the rows and just look for cell specific changes
     for row in range(total_rows):

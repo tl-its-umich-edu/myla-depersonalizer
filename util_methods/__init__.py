@@ -33,5 +33,5 @@ def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
   if map_to_range:
       map_sample = [int(((val - min(raw_sample)) * (max(orig_data) - min(orig_data))) / (max(raw_sample)
         - min(raw_sample)) + min(orig_data)) for val in raw_sample]
-
-  return raw_sample, map_sample
+      return map_sample
+  return raw_sample
