@@ -73,10 +73,17 @@ class TestAnonymizer(unittest.TestCase):
     def test_resample(self):
         # These will always be different values returnsd, just verify that the length is the same and they are within the original range
         test_vals = [21, 129, 123, 94]
-        raw_sample, map_sample = util_methods.kde_resample(test_vals)
+        map_sample = util_methods.kde_resample(test_vals)
         self.assertEqual(len(map_sample), 4)
         self.assertTrue(min(test_vals) <= min(map_sample))
         self.assertTrue(max(test_vals) >= max(map_sample))
+
+        test_vals = [0, 0, 0]
+        map_sample = util_methods.kde_resample(test_vals)
+        self.assertEqual(len(map_sample), 3)
+        self.assertTrue(min(test_vals) <= min(map_sample))
+        self.assertTrue(max(test_vals) >= max(map_sample))
+
 
 if __name__ == '__main__':
     unittest.main()
