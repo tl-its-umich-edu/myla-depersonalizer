@@ -58,9 +58,19 @@ for table in tables:
 
     # First just go through the columns and look for column wide changes
     for col in t_config.keys():
-        mod_name, func_name = (t_config.get(col).rsplit('.', 1) + [None] * 2)[:2]
+        mod_name, index_name = (t_config.get(col).rsplit('.', 1) + [None] * 2)[:2]
         if "redist" in mod_name:
-            print(df[col].describe())
+            # If it gets here it has to be numeric
+            df[col] = pd.to_numeric(df[col])
+            df[col].fillna(value=0, inplace=True)
+            # It was suggested something like this might replace all of this but I can't get it to work!
+            #df[col] = df.groupby([index_name])[col].transform(lambda x: kde_resample(x))
+            grouped = df.groupby(index_name)
+            for name, group in grouped:
+                grades = group.get(col)
+                raw_new_grades, map_new_grades = util_methods.kde_resample(grades.values)
+                for (g_index, g_value), new_grade in zip(grades.iteritems(), map_new_grades):
+                    df.at[g_index, col] = new_grade
     
     # Now go through the rows and just look for cell specific changes
     for row in range(total_rows):

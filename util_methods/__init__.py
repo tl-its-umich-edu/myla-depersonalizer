@@ -22,6 +22,8 @@ def pandasDeleteAndInsert(mysql_table: str, df: pandas.DataFrame, engine: sqlalc
         raise
 
 def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
+  logger.debug(orig_data)
+  
   kde = scipy.stats.gaussian_kde(orig_data, bw_method=bw_method)
 
   # Generate data from kde
