@@ -1,6 +1,6 @@
 ---
 title: My Learning Analytics Depersonalizer
-layout: post
+layout: default
 ---
 
 # My Learning Analytics DePersonalizer
