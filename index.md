@@ -1,3 +1,8 @@
+---
+title: My Learning Analytics Depersonalizer
+layout: post
+---
+
 # My Learning Analytics DePersonalizer
 
 ## Project Overview
