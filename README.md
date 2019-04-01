@@ -1,5 +1,5 @@
-# myla-anonymizer
-Test code to anonymize database (MyLA)
+# myla-depersonalizer
+Test code to depersonalize database (MyLA)
 
 See more information about this project on the Github Pages:
-http://tl.ctools.org/myla-anonymizer/
+http://tl.ctools.org/myla-depersonalizer/
