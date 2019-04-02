@@ -21,17 +21,25 @@ All configuration for this project is done in the config.json file. The current 
   * If the value is a string, it will retain the upper, lowercase or mixed case of the original string. The length will remain the same
   * If the value is numeric there may be leading or trailing zeroes dropped in the return value. It will attempt to retain all special characters encoding each part individually.
   * It breaks on special characters so you can have mixed strings, and numeric characters as a value and it will be returned.
+
 ### Faker Methods. These generate completely random fake data
 * faker.file_name
   * This returns a completely fake file name, currently nothing from the input is retained (such as extension)
+  * Return example: `assignment.mp4`
 * faker.name
    * This returns a completely fake name (first and last name)
+   * Return example: `Adaline Reichel`
 * faker.assignment
-   * This generates a fake assignment name based on similar named assignments used in Canvas.
+   * This generates a fake assignment name based on similar named assignments used in Canvas. 
+   * Return example: `Practice Assignment #196`
 * faker.date_time_on_date
    * This returns a new timestamp which is still on the original date. The columns that use this could be improved via redistribution methods
 * faker.user_name
    * This returns a completely random username
+   * Return example: `adaline`
+* faker.course
+   * This returns a fake course id. 
+   * Return example: `AUTO 273 007 SP 2026`
   
 ### Redistribution, calculation methods. These recalculate fields often baesd on other fields
 * redist.course_id
