@@ -29,7 +29,10 @@ with open(this_dir + "/config.json") as json_data:
     logger.info (db_config)
 
 # get the tables to run based on they keys in the config
-tables = db_config.keys()
+tables = config("TABLES", cast=Csv(), default="")
+# If the user doesn't specify specific tables just run them all
+if not(tables):
+    tables = db_config.keys()
 
 # Get the prefix and secret to use with FFX
 ID_ADDITION = config("ID_ADDITION", cast=int, default=0)
@@ -51,33 +54,58 @@ logger.info(f"Found table {tables}")
 for table in tables:
     logger.info(f"Processing {table}")
     t_config = (db_config.get(table))
-    df = pd.read_sql(f"SELECT * from {table}", engine)
+    df = pd.read_sql(f"SELECT * from {table}", engine).infer_objects()
     total_rows=len(df.axes[0])
     total_cols=len(df.axes[1])
     
+    # First go through the dataframe looking for cell specific changes
+    # TODO: These might be able to be refactored in the future to just apply across the column!
     for row in range(total_rows):
-        for col in t_config.keys():
+        for col in t_config:
             # Split the module from the function name
-            mod_name, func_name = (t_config.get(col).rsplit('.', 1) + [None] * 2)[:2]
+            col_name = col.get('name')
+            mod_name, func_name = (col.get('method').rsplit('.', 1) + [None] * 2)[:2]
             if "None" in mod_name:
-                logger.debug (f"No change indicated for {row} {col}")
+                logger.debug (f"No change indicated for {row} {col_name}")
             # Faker has no parameters
             elif "faker" in mod_name:
                 logger.debug("Transforming with Faker")
                 func = getattr(locals().get(mod_name), func_name)
                 if func_name == "date_time_on_date":
-                    df.at[row, col] = func(df.at[row,col])
+                    df.at[row, col_name] = func(df.at[row, col_name])
                 else:
-                    df.at[row, col] = func()
+                    df.at[row, col_name] = func()
             elif "ffx" in mod_name:
                 try:
                     logger.debug("Transforming with FFX")
-                    df.at[row, col] = getattr(locals().get(mod_name), func_name)(df.at[row,col], addition=ID_ADDITION)
+                    df.at[row, col_name] = getattr(locals().get(mod_name), func_name)(df.at[row, col_name], addition=ID_ADDITION)
                 except ValueError:
-                    logger.exception(f"Problem converting {df.at[row,col]}")
-                    logger.info(np.isnan(df.at[row,col]))
+                    logger.exception(f"Problem converting {df.at[row, col_name]}")
+                    logger.info(np.isnan(df.at[row, col_name]))
             elif "TODO" in "mod_name":
-                logger.info(f"{row} {col} marked with TODO, skipping")
+                logger.info(f"{row} {col_name} marked with TODO, skipping")
+            # else currently do nothing
+
+    # Now go through the columns and look for column wide changes
+    # These methods are based on using another column as an index 
+    # and applying the changes in bulk rather than individually
+    for col in t_config:
+        mod_name, index_name = (col.get('method').rsplit('.', 1) + [None] * 2)[:2]
+        col_name = col.get('name')
+        if "redist" in mod_name:
+            # If it gets here it has to be numeric
+            logger.debug(f"{index_name} {col_name}")
+            df[col_name] = pd.to_numeric(df[col_name])
+            df[col_name].fillna(value=0, inplace=True)
+            df[col_name] = df.groupby([index_name])[col_name].transform(lambda x: util_methods.kde_resample(x))
+        if "mean" in mod_name:
+            logger.debug(f"{index_name} {col_name}")
+            # This is a special case variable that averages a column on an index
+            avg_col, index_name = (index_name.rsplit('__', 1))
+            df[avg_col] = pd.to_numeric(df[avg_col])
+            df[avg_col].fillna(value=0, inplace=True)
+            df[avg_col].replace('None', pd.np.nan, inplace=True)
+            df[col_name] = df.groupby([index_name])[avg_col].transform(lambda x: round(x.mean(), 2))
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):
