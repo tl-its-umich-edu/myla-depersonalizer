@@ -106,6 +106,11 @@ for table in tables:
             df[avg_col].fillna(value=0, inplace=True)
             df[avg_col].replace('None', pd.np.nan, inplace=True)
             df[col_name] = df.groupby([index_name])[avg_col].transform(lambda x: round(x.mean(), 2))
+        if "shuffle" in mod_name:
+            # Shuffle column inplace
+            logger.debug(f"Shuffle {col_name}")
+            df[col_name].fillna(value=0, inplace=True)
+            util_methods.shuffle(df, shuffleCol= col_name)
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):
