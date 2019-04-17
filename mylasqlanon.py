@@ -110,7 +110,7 @@ for table in tables:
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")
             df[col_name].fillna(value=0, inplace=True)
-            util_methods.shuffle(df, shuffleCol= col_name)
+            util_methods.shuffle(df, shuffle_col= col_name, group_col=index_name)
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):

@@ -107,7 +107,7 @@ class TestAnonymizer(unittest.TestCase):
         # Verify the same grouping before and after for a value with time 45 minutes
         self.assertEqual(df.at[9, 'user_id'], 'user0')
         self.assertEqual(df.at[9, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
-        util_methods.shuffle(df, shuffle_col='access_time', group_col='user_id', group_by=True)
+        util_methods.shuffle(df, shuffle_col='access_time', group_col='user_id')
         self.assertEqual(df.at[15, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
         self.assertEqual(df.at[15, 'user_id'], 'user0')
         
