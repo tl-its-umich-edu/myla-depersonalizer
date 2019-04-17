@@ -41,13 +41,13 @@ def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
       return map_sample
   return raw_sample
 
-def shuffle(df, groupCol = "", shuffleCol = "", group_by = False):
+def shuffle(df, group_col = "", shuffle_col = "", group_by = False):
   """
   Shuffle a dataframe column inplace
   """
   if group_by:
-    # Shuffle shuffleCol by groupCol
-    df[shuffleCol] = df.groupby(groupCol)[shuffleCol].transform(np.random.permutation)
+    # Shuffle shuffle_col by groupCol
+    df[shuffle_col] = df.groupby(group_col)[shuffle_col].transform(np.random.permutation)
   else:
-    # Shuffle shuffleCol independently
-    df[shuffleCol] = np.random.permutation(df[shuffleCol].values)
+    # Shuffle shuffle_col independently
+    df[shuffle_col] = np.random.permutation(df[shuffle_col].values)
