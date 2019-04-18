@@ -3,6 +3,7 @@
 import hashlib, logging
 import scipy.stats
 import pandas, sqlalchemy
+import numpy as np
 
 logger = logging.getLogger()
 
@@ -39,3 +40,14 @@ def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
         - min(raw_sample)) + min(orig_data)) for val in raw_sample]
       return map_sample
   return raw_sample
+
+def shuffle(df, shuffle_col, group_col = None):
+  """
+  Shuffle a dataframe column inplace
+  """
+  if group_col:
+    # Shuffle shuffle_col by groupCol
+    df[shuffle_col] = df.groupby(group_col)[shuffle_col].transform(np.random.permutation)
+  else:
+    # Shuffle shuffle_col independently
+    df[shuffle_col] = np.random.permutation(df[shuffle_col].values)

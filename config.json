@@ -14,7 +14,8 @@
     ],
     "file_access": [
         {"name": "file_id", "method": "ffx.encrypt"},
-        {"name": "user_id", "method": "ffx.encrypt"}
+        {"name": "user_id", "method": "ffx.encrypt"},
+        {"name": "access_time", "method": "shuffle"}
     ],
     "file": [
         {"name": "id", "method": "ffx.encrypt"},

@@ -9,6 +9,8 @@ sys.path.insert(0, this_dir + "/..")
 from ffx_helper import FFXEncrypt
 from custom_provider import CustomProvider
 import util_methods
+import pandas as pd
+import numpy as np
 
 import datetime
 
@@ -84,6 +86,30 @@ class TestAnonymizer(unittest.TestCase):
         self.assertTrue(min(test_vals) <= min(map_sample))
         self.assertTrue(max(test_vals) >= max(map_sample))
 
-
+    def test_shuffle(self):
+        # Create a sample set of 10 users with access times every 5 minutes
+        time_start = datetime.datetime(2018, 1, 1)
+        data = []
+        for id in range(0,20):
+            # Create some sample files and 3 users
+            data.append([id, f'user{id%3}',time_start + datetime.timedelta(minutes=5*id)])
+        # Create the pandas DataFrame
+        df = pd.DataFrame(data, columns=['file_id', 'user_id', 'access_time'])
+        # Seed the randomizer so it's predictable for test
+        np.random.seed(util_methods.hashStringToInt("testpasstestpass", 8))
+        # Assert the 9th row is 45 minutes
+        self.assertEqual(df.at[9, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
+        util_methods.shuffle(df, shuffle_col='access_time')
+        # Assert the 3rd row is 45 minutes
+        self.assertEqual(df.at[3, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
+        # Shuffle again but group
+        df = pd.DataFrame(data, columns=['file_id', 'user_id', 'access_time'])
+        # Verify the same grouping before and after for a value with time 45 minutes
+        self.assertEqual(df.at[9, 'user_id'], 'user0')
+        self.assertEqual(df.at[9, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
+        util_methods.shuffle(df, shuffle_col='access_time', group_col='user_id')
+        self.assertEqual(df.at[15, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
+        self.assertEqual(df.at[15, 'user_id'], 'user0')
+        
 if __name__ == '__main__':
     unittest.main()
