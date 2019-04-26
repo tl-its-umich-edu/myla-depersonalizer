@@ -13,6 +13,7 @@
         {"name": "name", "method": "faker.course"}
     ],
     "file_access": [
+        {"name": "id", "method": "None"},
         {"name": "file_id", "method": "ffx.encrypt"},
         {"name": "user_id", "method": "ffx.encrypt"},
         {"name": "access_time", "method": "shuffle"}
@@ -23,7 +24,8 @@
         {"name": "course_id", "method": "ffx.encrypt"}
     ],
     "user": [
-        {"name": "id", "method": "ffx.encrypt"},
+        {"name": "id", "method": "None"},
+        {"name": "user_id", "method": "ffx.encrypt"},
         {"name": "name", "method": "faker.name"},
         {"name": "sis_id", "method": "ffx.encrypt"},
         {"name": "sis_name", "method": "faker.user_name"},
