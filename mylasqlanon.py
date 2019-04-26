@@ -38,8 +38,14 @@ if not(tables):
 ID_ADDITION = config("ID_ADDITION", cast=int, default=0)
 FFX_SECRET = config("FFX_SECRET", cast=str, default="")
 
+DISABLE_FOREIGN_KEYS = config("DISABLE_FOREIGN_KEYS", cast=bool, default=False)
+
 # Connect up to the database
 engine = create_engine(f"mysql://{config('MYSQL_USER')}:{config('MYSQL_PASSWORD')}@{config('MYSQL_HOST')}:{config('MYSQL_PORT')}/{config('MYSQL_DATABASE')}?charset=utf8")
+
+#Disable foreign key checks
+if (DISABLE_FOREIGN_KEYS):
+    engine.execute('SET FOREIGN_KEY_CHECKS = 0;')
 
 FAKER_SEED_LENGTH = config("FAKER_SEED_LENGTH", cast=int, default=0)
 
@@ -117,3 +123,6 @@ for table in tables:
         util_methods.pandasDeleteAndInsert(table, df, engine)
 
     logger.info(df.to_csv())
+# Re-enable checks
+if (DISABLE_FOREIGN_KEYS):
+    engine.execute('SET FOREIGN_KEY_CHECKS = 1;')
