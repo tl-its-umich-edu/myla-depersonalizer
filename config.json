@@ -42,24 +42,29 @@
         {"name": "drop_lowest", "method": "None"},
         {"name": "drop_highest", "method": "None"}
     ],
-    "assignment": [
-        {"name": "id", "method": "ffx.encrypt"},
-        {"name": "name", "method": "faker.assignment"},
-        {"name": "due_date", "method": "faker.date_time_on_date"},
-        {"name": "local_date", "method": "faker.date_time_on_date"},
-        {"name": "points_possible", "method": "redist.course_id"},
-        {"name": "course_id", "method": "ffx.encrypt"},
-        {"name": "assignment_group_id", "method": "ffx.encrypt"}
-    ],
-    "submission": [
-        {"name": "id", "method": "ffx.encrypt"},
-        {"name": "assignment_id", "method": "ffx.encrypt"},
-        {"name": "course_id", "method": "ffx.encrypt"},
-        {"name": "user_id", "method": "ffx.encrypt"},
-        {"name": "score", "method": "ffx.encrypt"},
-        {"name": "graded_date", "method": "faker.date_time_on_date"},
-        {"name": "avg_score", "method": "mean.score__assignment_id"}
-    ],
+    "join__assignment__submission" : {
+        "where" : "assignment.id = submission.assignment_id",
+        "tables" : {
+            "assignment": [
+                {"name": "id", "method": "ffx.encrypt"},
+                {"name": "name", "method": "faker.assignment"},
+                {"name": "due_date", "method": "faker.date_time_on_date"},
+                {"name": "local_date", "method": "faker.date_time_on_date"},
+                {"name": "points_possible", "method": "redist.assignment__course_id"},
+                {"name": "course_id", "method": "ffx.encrypt"},
+                {"name": "assignment_group_id", "method": "ffx.encrypt"}
+            ],
+            "submission": [
+                {"name": "id", "method": "ffx.encrypt"},
+                {"name": "assignment_id", "method": "ffx.encrypt"},
+                {"name": "course_id", "method": "ffx.encrypt"},
+                {"name": "user_id", "method": "ffx.encrypt"},
+                {"name": "score", "method": "ffx.encrypt"},
+                {"name": "graded_date", "method": "faker.date_time_on_date"},
+                {"name": "avg_score", "method": "mean.submission__score____submission__assignment_id"}
+            ]
+        }
+    },
     "assignment_weight_consideration": [
         {"name": "course_id", "method": "ffx.encrypt"},
         {"name": "consider_weight", "method": "None"}

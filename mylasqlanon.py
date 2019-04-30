@@ -59,10 +59,36 @@ ffx = FFXEncrypt(FFX_SECRET)
 logger.info(f"Found table {tables}")
 for table in tables:
     logger.info(f"Processing {table}")
-    t_config = (db_config.get(table))
-    df = pd.read_sql(f"SELECT * from {table}", engine).infer_objects()
+    t_config = []
+    # There's a special syntax for joined tables!
+    if "join__" in table:
+        # Figure out the tables to join and run a special query on them
+        join_tables = db_config.get(table).get("tables")
+        # Go thourhg each table building up the query string
+        tmp_cols = []
+        for join_table, join_cols in join_tables.items():
+            for join_col in join_cols:
+                # Get the column name
+                join_name = join_col.get("name")
+                # Create a new alias
+                join_alias = join_table + "__" + join_name
+                tmp_cols.append(f"{join_table}.{join_name} AS {join_alias}")
+                # Update the alias in the column
+                join_col["name"] = join_alias
+                t_config.append(join_col)
+        db_cols = ",".join(tmp_cols)
+        db_tables = ",".join(join_tables.keys())
+        db_where = db_config.get(table).get("where")
+        # Join these tables together locally so they can be processed
+        # Not quite sure how yet! 
+        df = pd.read_sql(f"SELECT {db_cols} FROM {db_tables} WHERE {db_where}", engine).infer_objects()
+    else:
+        t_config = (db_config.get(table))
+        df = pd.read_sql(f"SELECT * from {table}", engine).infer_objects()
     total_rows=len(df.axes[0])
     total_cols=len(df.axes[1])
+    logger.info(f"Total rows: {total_rows} cols: {total_cols}")
+    logger.info(df.columns)
     
     # First go through the dataframe looking for cell specific changes
     # TODO: These might be able to be refactored in the future to just apply across the column!
@@ -107,7 +133,7 @@ for table in tables:
         if "mean" in mod_name:
             logger.debug(f"{index_name} {col_name}")
             # This is a special case variable that averages a column on an index
-            avg_col, index_name = (index_name.rsplit('__', 1))
+            avg_col, index_name = (index_name.rsplit('____', 1))
             df[avg_col] = pd.to_numeric(df[avg_col])
             df[avg_col].fillna(value=0, inplace=True)
             df[avg_col].replace('None', pd.np.nan, inplace=True)
