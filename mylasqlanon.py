@@ -61,7 +61,7 @@ for table in tables:
     logger.info(f"Processing {table}")
     t_config = []
     # There's a special syntax for joined tables!
-    if "join__" in table:
+    if "|" in table:
         # Figure out the tables to join and run a special query on them
         join_tables = db_config.get(table).get("tables")
         # Go thourhg each table building up the query string
@@ -79,17 +79,19 @@ for table in tables:
         db_cols = ",".join(tmp_cols)
         db_tables = ",".join(join_tables.keys())
         db_where = db_config.get(table).get("where")
-        # Join these tables together locally so they can be processed
-        # Not quite sure how yet! 
-        df = pd.read_sql(f"SELECT {db_cols} FROM {db_tables} WHERE {db_where}", engine).infer_objects()
+        sql = f"SELECT {db_cols} FROM {db_tables} WHERE {db_where}"
     else:
         t_config = (db_config.get(table))
-        df = pd.read_sql(f"SELECT * from {table}", engine).infer_objects()
+        sql = f"SELECT * from {table}"
+    df = pd.read_sql(sql, engine).infer_objects()
     total_rows=len(df.axes[0])
     total_cols=len(df.axes[1])
     logger.info(f"Total rows: {total_rows} cols: {total_cols}")
     logger.info(df.columns)
-    
+
+    # If this dataframe is empty just skip it
+    if total_rows == 0 or total_cols == 0:
+        continue
     # First go through the dataframe looking for cell specific changes
     # TODO: These might be able to be refactored in the future to just apply across the column!
     for row in range(total_rows):

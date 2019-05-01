@@ -42,7 +42,7 @@
         {"name": "drop_lowest", "method": "None"},
         {"name": "drop_highest", "method": "None"}
     ],
-    "join__assignment__submission" : {
+    "assignment@id|submission@id" : {
         "where" : "assignment.id = submission.assignment_id",
         "tables" : {
             "assignment": [
