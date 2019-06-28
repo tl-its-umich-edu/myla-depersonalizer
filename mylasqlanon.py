@@ -103,7 +103,7 @@ for table in tables:
                 logger.debug (f"No change indicated for {row} {col_name}")
             # Faker has no parameters
             elif "faker" in mod_name:
-                logger.debug("Transforming with Faker")
+                logger.debug(f"Transforming {col_name} with Faker")
                 func = getattr(locals().get(mod_name), func_name)
                 if func_name == "date_time_on_date":
                     df.at[row, col_name] = func(df.at[row, col_name])
@@ -111,7 +111,7 @@ for table in tables:
                     df.at[row, col_name] = func()
             elif "ffx" in mod_name:
                 try:
-                    logger.debug("Transforming with FFX")
+                    logger.debug(f"Transforming {col_name} with FFX")
                     df.at[row, col_name] = getattr(locals().get(mod_name), func_name)(df.at[row, col_name], addition=ID_ADDITION)
                 except ValueError:
                     logger.exception(f"Problem converting {df.at[row, col_name]}")

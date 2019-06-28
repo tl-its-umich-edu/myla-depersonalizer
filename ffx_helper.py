@@ -41,13 +41,14 @@ class FFXEncrypt():
             return val
 
         try:
+            logger.debug(type(val))
             # Strings that are integers should just be int
             if isinstance(val, str) and val.isdigit():
                 val = int(val)
-            if isinstance(val, int): # If val is Integer
+            if np.issubdtype(type(val), int): # If val is Integer
                 # If there's an addition do the new calculation
                 n_val = val - addition
-                logger.debug(f"n_val = {n_val}")
+                logger.debug(f"n_val = {n_val} val = {val} addition = {addition}")
                 if n_val > 0:
                    val = n_val
                 e = pyffx.Integer(self.ffx_secret, length=len(str(val)))
@@ -79,7 +80,7 @@ class FFXEncrypt():
 
             logger.debug(f"Out val {enc}")  
             # Return it as a string 
-            if isinstance(val, int) and n_val > 0:
+            if np.issubdtype(type(val), int) and n_val > 0:
                 enc += addition
             return enc
         except Exception as e:
