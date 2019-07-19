@@ -12,14 +12,15 @@
         {"name": "term_id", "method": "None"},
         {"name": "name", "method": "faker.course"}
     ],
-    "file_access": [
+    "resource_access": [
         {"name": "id", "method": "None"},
-        {"name": "file_id", "method": "ffx.encrypt"},
+        {"name": "resource_id", "method": "ffx.encrypt"},
         {"name": "user_id", "method": "ffx.encrypt"},
         {"name": "access_time", "method": "shuffle"}
     ],
-    "file": [
+    "resource": [
         {"name": "id", "method": "ffx.encrypt"},
+        {"name": "resource_type", "method": "shuffle"},
         {"name": "name", "method": "faker.file_name"},
         {"name": "course_id", "method": "ffx.encrypt"}
     ],
@@ -78,7 +79,7 @@
     "user_default_selection": [
         {"name": "id", "method": "ffx.encrypt"},
         {"name": "course_id", "method": "ffx.encrypt"},
-        {"name": "user_id", "method": "ffx.encrypt"},
+        {"name": "user_sis_name", "method": "ffx.encrypt"},
         {"name": "default_view_type", "method": "None"},
         {"name": "default_view_value", "method": "None"}
     ]

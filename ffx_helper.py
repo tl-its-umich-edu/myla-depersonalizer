@@ -45,7 +45,7 @@ class FFXEncrypt():
             # Strings that are integers should just be int
             if isinstance(val, str) and val.isdigit():
                 val = int(val)
-            if np.issubdtype(type(val), int): # If val is Integer
+            if np.issubdtype(type(val), np.unsignedinteger): # If val is Integer
                 # If there's an addition do the new calculation
                 n_val = val - addition
                 logger.debug(f"n_val = {n_val} val = {val} addition = {addition}")
@@ -80,7 +80,7 @@ class FFXEncrypt():
 
             logger.debug(f"Out val {enc}")  
             # Return it as a string 
-            if np.issubdtype(type(val), int) and n_val > 0:
+            if np.issubdtype(type(val), np.unsignedinteger):
                 enc += addition
             return enc
         except Exception as e:
