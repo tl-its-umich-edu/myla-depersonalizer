@@ -53,8 +53,8 @@ def pandasDeleteAndInsert(mysql_tables: str, df: pandas.DataFrame, engine: sqlal
 def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
     logger.debug(orig_data)
 
-    # If the original list is empty
-    if not(any(orig_data)):
+    # Needs more than 1 element to resample
+    if len(orig_data) <= 1:
         return orig_data
 
     kde = scipy.stats.gaussian_kde(orig_data, bw_method=bw_method)
