@@ -27,8 +27,8 @@ class FFXEncrypt():
         return count, v
 
     def encrypt(self, val, addition: int = sys.maxsize):
-        """ Encrypt a value with FFX library
-        :param val: Vaule to encrypt
+        """ Encrypt a value with FFX library. Negative values are currently not supported as integers.
+        :param val: Value to encrypt
         :type val: Either an integer, a string or a floating point number (represented as a string)
         :param addition: Value added to an integer number, which will be subtracted first, defaults to sys.maxsize
         :param addition: int, optional
@@ -45,7 +45,7 @@ class FFXEncrypt():
             # Strings that are integers should just be int
             if isinstance(val, str) and val.isdigit():
                 val = int(val)
-            if np.issubdtype(type(val), np.unsignedinteger): # If val is Integer
+            if np.issubdtype(type(val), np.int64) and val > 0: # If val is Integer
                 # If there's an addition do the new calculation
                 n_val = val - addition
                 logger.debug(f"n_val = {n_val} val = {val} addition = {addition}")
@@ -80,7 +80,7 @@ class FFXEncrypt():
 
             logger.debug(f"Out val {enc}")  
             # Return it as a string 
-            if np.issubdtype(type(val), np.unsignedinteger):
+            if np.issubdtype(type(val), np.int64) and n_val > 0:
                 enc += addition
             return enc
         except Exception as e:

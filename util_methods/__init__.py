@@ -57,7 +57,12 @@ def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
     if len(orig_data) <= 1:
         return orig_data
 
-    kde = scipy.stats.gaussian_kde(orig_data, bw_method=bw_method)
+    try:
+        kde = scipy.stats.gaussian_kde(orig_data, bw_method=bw_method)
+    except Exception as e:
+        logger.exception("Course not handle this data")
+        return orig_data
+
 
     # Generate data from kde
     raw_sample = kde.resample(len(orig_data)).T[:, 0]
