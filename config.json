@@ -20,7 +20,7 @@
     ],
     "resource": [
         {"name": "id", "method": "ffx.encrypt"},
-        {"name": "resource_type", "method": "shuffle"},
+        {"name": "resource_type", "method": "shuffle.course_id"},
         {"name": "name", "method": "faker.file_name"},
         {"name": "course_id", "method": "ffx.encrypt"}
     ],

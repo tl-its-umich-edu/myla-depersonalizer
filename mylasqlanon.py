@@ -129,22 +129,16 @@ for table in tables:
         if "redist" in mod_name:
             # If it gets here it has to be numeric
             logger.debug(f"{index_name} {col_name}")
-            df[col_name] = pd.to_numeric(df[col_name])
-            df[col_name].fillna(value=0, inplace=True)
-            df[col_name] = df.groupby([index_name])[col_name].transform(lambda x: util_methods.kde_resample(x))
+            util_methods.redist(df, col_name, index_name)
         if "mean" in mod_name:
             logger.debug(f"{index_name} {col_name}")
             # This is a special case variable that averages a column on an index
             avg_col, index_name = (index_name.rsplit('____', 1))
-            df[avg_col] = pd.to_numeric(df[avg_col])
-            df[avg_col].fillna(value=0, inplace=True)
-            df[avg_col].replace('None', pd.np.nan, inplace=True)
-            df[col_name] = df.groupby([index_name])[avg_col].transform(lambda x: round(x.mean(), 2))
+            util_methods.mean(df, avg_col, col_name, index_name)
         if "shuffle" in mod_name:
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")
-            df[col_name].fillna(value=0, inplace=True)
-            util_methods.shuffle(df, shuffle_col= col_name, group_col=index_name)
+            util_methods.shuffle(df, shuffle_col=col_name, index_col=index_name)
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):

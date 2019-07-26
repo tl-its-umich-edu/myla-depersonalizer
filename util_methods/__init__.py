@@ -2,7 +2,8 @@
 
 import hashlib, logging
 import scipy.stats
-import pandas, sqlalchemy
+import pandas as pd
+import sqlalchemy
 import numpy as np
 from typing import List
 
@@ -13,7 +14,7 @@ def hashStringToInt(s: str, length: int):
     return int(hashlib.sha1(s.encode('utf-8')).hexdigest(), 16) % (10 ** length)
 
 
-def pandasDeleteAndInsert(mysql_tables: str, df: pandas.DataFrame, engine: sqlalchemy.engine.Engine):
+def pandasDeleteAndInsert(mysql_tables: str, df: pd.DataFrame, engine: sqlalchemy.engine.Engine):
     """Delete from the named table and insert
 
     :param mysql_tables: Either a single value or | separated list of tables that will be inserted
@@ -45,22 +46,17 @@ def pandasDeleteAndInsert(mysql_tables: str, df: pandas.DataFrame, engine: sqlal
         try:
             df_tmp.to_sql(con=engine, name=table_name,
                           if_exists='append', index=False)
-        except Exception as e:
+        except Exception:
             logger.exception(f"Error running to_sql on table {table_name}")
             raise
 
 
 def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
     logger.debug(orig_data)
-
-    # Needs more than 1 element to resample
-    if len(orig_data) <= 1:
-        return orig_data
-
     try:
         kde = scipy.stats.gaussian_kde(orig_data, bw_method=bw_method)
-    except Exception as e:
-        logger.exception("Course not handle this data")
+    except Exception:
+        logger.info("gaussian_kde could not handle this data, original data returned.", exc_info=True)
         return orig_data
 
 
@@ -75,13 +71,39 @@ def kde_resample(orig_data, bw_method="silverman", map_to_range=True):
     return raw_sample
 
 
-def shuffle(df, shuffle_col, group_col=None):
+def shuffle(df:pd.DataFrame, shuffle_col:str, index_col:str=None):
     """
     Shuffle a dataframe column inplace
     """
-    if group_col:
+    df[shuffle_col].fillna(value=0, inplace=True)
+    if index_col:
         # Shuffle shuffle_col by groupCol
-        df[shuffle_col] = df.groupby(group_col)[shuffle_col].transform(np.random.permutation)
+        df[shuffle_col] = df.groupby(index_col)[shuffle_col].transform(np.random.permutation)
     else:
         # Shuffle shuffle_col independently
         df[shuffle_col] = np.random.permutation(df[shuffle_col].values)
+
+def mean(df:pd.DataFrame, avg_col:str, result_col:str, index_col:str):
+    """ Calculates the mean of one column grouped by another index column 
+        and stores the results inplace in col_name
+    
+    :param df: Data Frame
+    :param avg_col: Column that's going to be used as the average
+    :param index_col: Column that will be used as the index
+    :param result_col: Column that will hold the result
+    """
+    df[avg_col] = pd.to_numeric(df[avg_col])
+    df[avg_col].fillna(value=0, inplace=True)
+    df[avg_col].replace('None', pd.np.nan, inplace=True)
+    df[result_col] = df.groupby([index_col])[avg_col].transform(lambda x: round(x.mean(), 2))
+
+def redist(df:pd.DataFrame, redist_col:str, index_col:str):
+    """Redistributes scores within an indexed column inplace
+    
+    :param df: Dataframe holding the scores
+    :param redist_col: Column that will be used for the redistribution
+    :param index_col: Index to do the redistribution on
+    """
+    df[redist_col] = pd.to_numeric(df[redist_col], errors='ignore')
+    df[redist_col].fillna(value=0, inplace=True)
+    df[redist_col] = df.groupby([index_col])[redist_col].transform(lambda x: kde_resample(x))

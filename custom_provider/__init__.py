@@ -42,7 +42,7 @@ class CustomProvider(BaseProvider):
             return self.generator.date_time_between_dates(datetime_start=start, datetime_end=end)
 
         except:
-            logger.warning(f"Exception for date of {date}, just returning original date")
+            logger.info(f"Exception for date of {date}, just returning original date")
             return date
 
     def course(self):

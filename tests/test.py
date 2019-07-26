@@ -26,6 +26,19 @@ class TestAnonymizer(unittest.TestCase):
         cls.faker = Faker()
         cls.faker.add_provider(CustomProvider)
 
+    @staticmethod
+    def sampleAccessDF():
+        """Create a sample set of 10 users with access times every 5 minutes
+        """
+        time_start = datetime.datetime(2018, 1, 1)
+        data = []
+        types = ['leccap', 'canvas']
+        for id in range(0,20):
+            # Create some sample files and 3 users
+            data.append([id, types[id%2], f'user{id%3}',time_start + datetime.timedelta(minutes=5*id)])
+        # Create the pandas DataFrame
+        return pd.DataFrame(data, columns=['file_id', 'file_type', 'user_id', 'access_time'])
+
     def test_ffx_encrypt(self):
         self.assertEqual(self.ffx.encrypt("ABC"), 'HZC')
     def test_ffx_prefix(self):
@@ -69,8 +82,8 @@ class TestAnonymizer(unittest.TestCase):
         
     def test_course_id(self):
         self.faker.seed(util_methods.hashStringToInt("testpasstestpass", 16))
-        self.assertEqual(self.faker.course(),"AUTO 296 006 FA 2073")
-        self.assertEqual(self.faker.course(), "AUTO 273 007 SP 2026")
+        self.assertEqual(self.faker.course(),"AUTO 296 006 FA 2073") #pylint: disable=no-member
+        self.assertEqual(self.faker.course(), "AUTO 273 007 SP 2026") #pylint: disable=no-member
 
     def test_resample(self):
         # These will always be different values returnsd, just verify that the length is the same and they are within the original range
@@ -87,14 +100,7 @@ class TestAnonymizer(unittest.TestCase):
         self.assertTrue(max(test_vals) >= max(map_sample))
 
     def test_shuffle(self):
-        # Create a sample set of 10 users with access times every 5 minutes
-        time_start = datetime.datetime(2018, 1, 1)
-        data = []
-        for id in range(0,20):
-            # Create some sample files and 3 users
-            data.append([id, f'user{id%3}',time_start + datetime.timedelta(minutes=5*id)])
-        # Create the pandas DataFrame
-        df = pd.DataFrame(data, columns=['file_id', 'user_id', 'access_time'])
+        df = self.sampleAccessDF()
         # Seed the randomizer so it's predictable for test
         np.random.seed(util_methods.hashStringToInt("testpasstestpass", 8))
         # Assert the 9th row is 45 minutes
@@ -103,11 +109,11 @@ class TestAnonymizer(unittest.TestCase):
         # Assert the 3rd row is 45 minutes
         self.assertEqual(df.at[3, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
         # Shuffle again but group
-        df = pd.DataFrame(data, columns=['file_id', 'user_id', 'access_time'])
+        df = self.sampleAccessDF()
         # Verify the same grouping before and after for a value with time 45 minutes
         self.assertEqual(df.at[9, 'user_id'], 'user0')
         self.assertEqual(df.at[9, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
-        util_methods.shuffle(df, shuffle_col='access_time', group_col='user_id')
+        util_methods.shuffle(df, shuffle_col='access_time', index_col='user_id')
         self.assertEqual(df.at[15, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
         self.assertEqual(df.at[15, 'user_id'], 'user0')
         
