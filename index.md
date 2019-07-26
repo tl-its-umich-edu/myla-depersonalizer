@@ -43,10 +43,13 @@ All configuration for this project is done in the config.json file. The current 
   
 ### Redistribution, calculation methods. These recalculate fields often baesd on other fields
 * redist.course_id
-   * Grouping by the column (after the period) use [Kernel Density Estimation (KDE)](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html) to redistribute all of the numeric values within that course
+   * Grouping by the (optiona) column (after the period) use [Kernel Density Estimation (KDE)](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html) to redistribute all of the numeric values within that course
    * The values should have a similar distribution as the source but will be completely new values
 * mean.score__assignment_id
   * Calculate the mean value of the column after the period (in this case score) grouped by the column after __ (in this case assignment_id) and assign this value to all grouped columns
+* shuffle.course_id
+  * Grouping by the (optional) column (after the period) just shuffle the values within that column around.
+  * The values can be any type they will just be shuffled
 
 ## Screenshots of various views
 ### Assignments
