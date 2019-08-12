@@ -27,4 +27,4 @@ The other variables here are for testing.
 - UPDATE_DATABASE to actually update the database
 - DISABLE_FOREIGN_KEYS to disable keys which may be necessary to perform some updates
 
-Then the main file to run (with python) is mylasqlanon.py`
+Then the main file to run (with python) is `mylasqlanon.py`
