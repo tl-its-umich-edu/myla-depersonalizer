@@ -39,7 +39,10 @@ class FFXEncrypt():
         # If the value is none or if its numpy and nan then just return it
         if val == None or (isinstance(val, np.float64) and np.isnan(val)):
             return val
-
+        # Some floats are actually integers, convert these
+        # They have to be represented as float64 becaues of NaN
+        if (isinstance(val, np.float64) and val.is_integer()):
+            val = np.int64(val)
         try:
             logger.debug(type(val))
             # Strings that are integers should just be int
