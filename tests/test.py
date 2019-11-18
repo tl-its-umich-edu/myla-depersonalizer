@@ -65,14 +65,14 @@ class TestAnonymizer(unittest.TestCase):
         self.assertEqual(self.ffx.encrypt('test@@@@gmail.colll099m'), 'cafw@@@@nyzav.ddzvu628k')
         self.assertEqual(self.ffx.encrypt('123abc.456.bda123'), '680hzc.605.qfu680')
     def test_assignment_custom(self):
-        self.faker.seed(util_methods.hashStringToInt("testpasstestpass", 16))
+        self.faker.seed(util_methods.hash_string_to_int("testpasstestpass", 16))
         # pylint: disable=no-member
         self.assertEqual(self.faker.assignment(),"Practice Assignment #196")
         # pylint: disable=no-member
         self.assertEqual(self.faker.assignment(), "Architecture Assignment #819")
 
     def test_date_time_on_date(self):
-        self.faker.seed(util_methods.hashStringToInt("testpasstestpass", 16))
+        self.faker.seed(util_methods.hash_string_to_int("testpasstestpass", 16))
         # pylint: disable=no-member
         self.assertEqual(self.faker.date_time_on_date(datetime.datetime(2019, 1, 1, 1, 1, 1)), datetime.datetime(2019, 1, 1, 6, 58, 12))
 
@@ -81,7 +81,7 @@ class TestAnonymizer(unittest.TestCase):
         self.assertEqual(self.faker.date_time_on_date("2019-05-01 13:14:15"), datetime.datetime(2019, 5, 1, 11, 58, 39))
         
     def test_course_id(self):
-        self.faker.seed(util_methods.hashStringToInt("testpasstestpass", 16))
+        self.faker.seed(util_methods.hash_string_to_int("testpasstestpass", 16))
         self.assertEqual(self.faker.course(),"AUTO 296 006 FA 2073") #pylint: disable=no-member
         self.assertEqual(self.faker.course(), "AUTO 273 007 SP 2026") #pylint: disable=no-member
 
@@ -93,16 +93,10 @@ class TestAnonymizer(unittest.TestCase):
         self.assertTrue(min(test_vals) <= min(map_sample))
         self.assertTrue(max(test_vals) >= max(map_sample))
 
-        test_vals = [0, 0, 0]
-        map_sample = util_methods.kde_resample(test_vals)
-        self.assertEqual(len(map_sample), 3)
-        self.assertTrue(min(test_vals) <= min(map_sample))
-        self.assertTrue(max(test_vals) >= max(map_sample))
-
     def test_shuffle(self):
         df = self.sampleAccessDF()
         # Seed the randomizer so it's predictable for test
-        np.random.seed(util_methods.hashStringToInt("testpasstestpass", 8))
+        np.random.seed(util_methods.hash_string_to_int("testpasstestpass", 8))
         # Assert the 9th row is 45 minutes
         self.assertEqual(df.at[9, 'access_time'], pd.Timestamp('2018-01-01 00:45:00'))
         util_methods.shuffle(df, shuffle_col='access_time')

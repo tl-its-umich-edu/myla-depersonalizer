@@ -50,7 +50,7 @@ if (DISABLE_FOREIGN_KEYS):
 FAKER_SEED_LENGTH = config("FAKER_SEED_LENGTH", cast=int, default=0)
 
 faker = Faker()
-faker.seed(util_methods.hashStringToInt(FFX_SECRET, FAKER_SEED_LENGTH))   
+faker.seed(util_methods.hash_string_to_int(FFX_SECRET, FAKER_SEED_LENGTH))   
 faker.add_provider(CustomProvider)
 
 # This needs the string FFX_SECRET byte encoded
@@ -66,24 +66,27 @@ for table in tables:
         join_tables = db_config.get(table).get("tables")
         # Go thourhg each table building up the query string
         tmp_cols = []
-        for join_table, join_cols in join_tables.items():
-            for join_col in join_cols:
+        for join_table in join_tables:
+            join_table_name = join_table.get("name")
+            for join_col in join_table.get("cols"):
                 # Get the column name
-                join_name = join_col.get("name")
+                join_col_name = join_col.get("name")
                 # Create a new alias
-                join_alias = join_table + "__" + join_name
-                tmp_cols.append(f"{join_table}.{join_name} AS {join_alias}")
+                join_alias = join_table_name + "__" + join_col_name
+                tmp_cols.append(f"{join_table_name}.{join_col_name} AS {join_alias}")
                 # Update the alias in the column
                 join_col["name"] = join_alias
                 t_config.append(join_col)
         db_cols = ",".join(tmp_cols)
-        db_tables = ",".join(join_tables.keys())
-        db_where = db_config.get(table).get("where")
-        sql = f"SELECT {db_cols} FROM {db_tables} WHERE {db_where}"
+        # Get the name of the first table
+        db_table = join_tables[0].get("name")
+        db_join = db_config.get(table).get("join")
+        sql = f"SELECT {db_cols} FROM {db_table} {db_join}"
     else:
         t_config = (db_config.get(table))
         sql = f"SELECT * from {table}"
-    df = pd.read_sql(sql, engine).infer_objects()
+    logger.info(sql)
+    df = pd.read_sql(sql, engine)
     total_rows=len(df.axes[0])
     total_cols=len(df.axes[1])
     logger.info(f"Total rows: {total_rows} cols: {total_cols}")
@@ -142,7 +145,7 @@ for table in tables:
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):
-        util_methods.pandasDeleteAndInsert(table, df, engine)
+        util_methods.pandas_delete_and_insert(table, df, engine)
 
     logger.info(df.to_csv())
 # Re-enable checks
