@@ -129,8 +129,9 @@ for table in tables:
     # and applying the changes in bulk rather than individually
     for col in t_config:
         mod_name = col.get("module")
-        index_name = col.get('index')
-        col_name = col.get('name')
+        index_name = col.get("index")
+        col_name = col.get("name")
+        source_name = col.get("source")
         if "redist" in mod_name:
             # If it gets here it has to be numeric
             logger.debug(f"{index_name} {col_name}")
@@ -138,8 +139,8 @@ for table in tables:
         if "mean" in mod_name:
             logger.debug(f"{index_name} {col_name}")
             # This is a special case variable that averages a column on an index
-            avg_col, index_name = (index_name.rsplit('____', 1))
-            util_methods.mean(df, avg_col, col_name, index_name)
+            index_name = (index_name.rsplit('____', 1))
+            util_methods.mean(df, source_name, col_name, index_name)
         if "shuffle" in mod_name:
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")

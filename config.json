@@ -53,7 +53,7 @@
                     {"name": "name", "module": "faker", "method": "assignment"},
                     {"name": "due_date", "module": "faker", "method": "date_time_on_date"},
                     {"name": "local_date", "module": "faker", "method": "date_time_on_date"},
-                    {"name": "points_possible", "module": "redist", "index": "assignment__course_id"},
+                    {"name": "points_possible", "module": "redist", "index": "assignment.course_id"},
                     {"name": "course_id", "module": "ffx", "method": "encrypt"},
                     {"name": "assignment_group_id", "module": "ffx", "method": "encrypt"}
                 ]
@@ -67,7 +67,7 @@
                     {"name": "user_id", "module": "ffx", "method": "encrypt"},
                     {"name": "score", "module": "ffx", "method": "encrypt"},
                     {"name": "graded_date", "module": "faker", "method": "date_time_on_date"},
-                    {"name": "avg_score", "module": "mean", "index": "submission__score____submission__assignment_id"}
+                    {"name": "avg_score", "module": "mean", "source": "submission.score", "index": "submission.assignment_id"}
                 ]
             }
         ]

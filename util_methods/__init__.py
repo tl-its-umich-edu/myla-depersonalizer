@@ -19,7 +19,7 @@ def pandas_delete_and_insert(mysql_tables: str, df: pd.DataFrame, engine: sqlalc
 
     :param mysql_tables: Either a single value or | separated list of tables that will be inserted
     :type mysql_tables: str
-    :param df: Either a single dataframe or one that has column names split by table_name__column_name
+    :param df: Either a single dataframe or one that has column names split by table_name.column_name
     :type df: pandas.DataFrame
     :param engine: SQLAlchemy engine
     :type engine: sqlalchemy.engine.Engine
@@ -34,7 +34,7 @@ def pandas_delete_and_insert(mysql_tables: str, df: pd.DataFrame, engine: sqlalc
 
         # write to MySQL
         if len(mysql_tables) > 1:
-            table_prefix = table_name + "__"
+            table_prefix = table_name + "."
             # Filter and Remove the table name from  column so it can be written back
             df_tmp = df.filter(regex=table_prefix)
             df_tmp.rename(columns=lambda x: str(x)[
