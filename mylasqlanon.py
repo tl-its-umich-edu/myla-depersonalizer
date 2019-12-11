@@ -100,22 +100,23 @@ for table in tables:
     for row in range(total_rows):
         for col in t_config:
             # Split the module from the function name
-            col_name = col.get('name')
-            mod_name, func_name = (col.get('method').rsplit('.', 1) + [None] * 2)[:2]
+            col_name = col.get("name")
+            mod_name = col.get("module")
+            method_name = col.get("method")
             if "None" in mod_name:
                 logger.debug (f"No change indicated for {row} {col_name}")
             # Faker has no parameters
             elif "faker" in mod_name:
                 logger.debug(f"Transforming {col_name} with Faker")
-                func = getattr(locals().get(mod_name), func_name)
-                if func_name == "date_time_on_date":
+                func = getattr(locals().get(mod_name), method_name)
+                if method_name == "date_time_on_date":
                     df.at[row, col_name] = func(df.at[row, col_name])
                 else:
                     df.at[row, col_name] = func()
             elif "ffx" in mod_name:
                 try:
                     logger.debug(f"Transforming {col_name} with FFX")
-                    df.at[row, col_name] = getattr(locals().get(mod_name), func_name)(df.at[row, col_name], addition=ID_ADDITION)
+                    df.at[row, col_name] = getattr(locals().get(mod_name), method_name)(df.at[row, col_name], addition=ID_ADDITION)
                 except ValueError:
                     logger.exception(f"Problem converting {df.at[row, col_name]}")
                     logger.info(np.isnan(df.at[row, col_name]))
@@ -127,7 +128,8 @@ for table in tables:
     # These methods are based on using another column as an index 
     # and applying the changes in bulk rather than individually
     for col in t_config:
-        mod_name, index_name = (col.get('method').rsplit('.', 1) + [None] * 2)[:2]
+        mod_name = col.get("module")
+        index_name = col.get('index')
         col_name = col.get('name')
         if "redist" in mod_name:
             # If it gets here it has to be numeric
