@@ -72,8 +72,8 @@ for table in tables:
                 # Get the column name
                 join_col_name = join_col.get("name")
                 # Create a new alias
-                join_alias = join_table_name + "__" + join_col_name
-                tmp_cols.append(f"{join_table_name}.{join_col_name} AS {join_alias}")
+                join_alias = f"{join_table_name}.{join_col_name}"
+                tmp_cols.append(f"{join_table_name}.{join_col_name} AS `{join_alias}`")
                 # Update the alias in the column
                 join_col["name"] = join_alias
                 t_config.append(join_col)
@@ -138,8 +138,6 @@ for table in tables:
             util_methods.redist(df, col_name, index_name)
         if "mean" in mod_name:
             logger.debug(f"{index_name} {col_name}")
-            # This is a special case variable that averages a column on an index
-            index_name = (index_name.rsplit('____', 1))
             util_methods.mean(df, source_name, col_name, index_name)
         if "shuffle" in mod_name:
             # Shuffle column inplace

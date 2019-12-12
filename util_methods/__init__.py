@@ -36,7 +36,7 @@ def pandas_delete_and_insert(mysql_tables: str, df: pd.DataFrame, engine: sqlalc
         if len(mysql_tables) > 1:
             table_prefix = table_name + "."
             # Filter and Remove the table name from  column so it can be written back
-            df_tmp = df.filter(regex=table_prefix)
+            df_tmp = df.filter(like=table_prefix)
             df_tmp.rename(columns=lambda x: str(x)[
                                    len(table_prefix):], inplace=True)
             if index_name:
