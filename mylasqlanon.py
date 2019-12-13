@@ -103,7 +103,7 @@ for table in tables:
             col_name = col.get("name")
             mod_name = col.get("module")
             method_name = col.get("method")
-            if "None" in mod_name:
+            if not mod_name:
                 logger.debug (f"No change indicated for {row} {col_name}")
             # Faker has no parameters
             elif "faker" in mod_name:
@@ -132,14 +132,16 @@ for table in tables:
         index_name = col.get("index")
         col_name = col.get("name")
         source_name = col.get("source")
-        if "redist" in mod_name:
+        if not mod_name: 
+                logger.debug (f"No change indicated for {col_name}")
+        elif "redist" in mod_name:
             # If it gets here it has to be numeric
             logger.debug(f"{index_name} {col_name}")
             util_methods.redist(df, col_name, index_name)
-        if "mean" in mod_name:
+        elif "mean" in mod_name:
             logger.debug(f"{index_name} {col_name}")
             util_methods.mean(df, source_name, col_name, index_name)
-        if "shuffle" in mod_name:
+        elif "shuffle" in mod_name:
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")
             util_methods.shuffle(df, shuffle_col=col_name, index_col=index_name)

@@ -1,19 +1,19 @@
 {
     "academic_terms": [
-        {"name": "id", "module": "None"},
-        {"name": "canvas_id", "module": "None"},
-        {"name": "name", "module": "None"},
-        {"name": "date_start", "module": "None"},
-        {"name": "date_end", "module": "None"}
+        {"name": "id", "module": null},
+        {"name": "canvas_id", "module": null},
+        {"name": "name", "module": null},
+        {"name": "date_start", "module": null},
+        {"name": "date_end", "module": null}
     ],
     "course": [
         {"name": "id", "module": "ffx", "method": "encrypt"},
         {"name": "canvas_id", "module": "ffx", "method": "encrypt"},
-        {"name": "term_id", "module": "None"},
+        {"name": "term_id", "module": null},
         {"name": "name", "module": "faker", "method": "course"}
     ],
     "resource_access": [
-        {"name": "id", "module": "None"},
+        {"name": "id", "module": null},
         {"name": "resource_id", "module": "ffx", "method": "encrypt"},
         {"name": "user_id", "module": "ffx", "method": "encrypt"},
         {"name": "access_time", "module": "shuffle"}
@@ -25,7 +25,7 @@
         {"name": "course_id", "module": "ffx", "method": "encrypt"}
     ],
     "user": [
-        {"name": "id", "module": "None"},
+        {"name": "id", "module": null},
         {"name": "user_id", "module": "ffx", "method": "encrypt"},
         {"name": "name", "module": "faker", "method": "name"},
         {"name": "sis_id", "module": "ffx", "method": "encrypt"},
@@ -40,8 +40,8 @@
         {"name": "weight", "module": "redist", "index": "course_id"},
         {"name": "group_points", "module": "redist", "index": "course_id"}, 
         {"name": "course_id", "module": "ffx", "method": "encrypt"},
-        {"name": "drop_lowest", "module": "None"},
-        {"name": "drop_highest", "module": "None"}
+        {"name": "drop_lowest", "module": null},
+        {"name": "drop_highest", "module": null}
     ],
     "assignment@id|submission@id" : {
         "join" : "LEFT JOIN submission on (assignment.id = submission.assignment_id)",
@@ -74,19 +74,19 @@
     },
     "assignment_weight_consideration": [
         {"name": "course_id", "module": "ffx", "method": "encrypt"},
-        {"name": "consider_weight", "module": "None"}
+        {"name": "consider_weight", "module": null}
     ],
     "course_view_option": [
         {"name": "course_id", "module": "ffx", "method": "encrypt"},
-        {"name": "show_files_accessed", "module": "None"},
-        {"name": "show_assignment_planning", "module": "None"},
-        {"name": "show_grade_distribution", "module": "None"}
+        {"name": "show_files_accessed", "module": null},
+        {"name": "show_assignment_planning", "module": null},
+        {"name": "show_grade_distribution", "module": null}
     ],
     "user_default_selection": [
         {"name": "id", "module": "ffx", "method": "encrypt"},
         {"name": "course_id", "module": "ffx", "method": "encrypt"},
         {"name": "user_sis_name", "module": "ffx", "method": "encrypt"},
-        {"name": "default_view_type", "module": "None"},
-        {"name": "default_view_value", "module": "None"}
+        {"name": "default_view_type", "module": null},
+        {"name": "default_view_value", "module": null}
     ]
 }
