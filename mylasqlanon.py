@@ -103,20 +103,22 @@ for table in tables:
             col_name = col.get("name")
             mod_name = col.get("module")
             method_name = col.get("method")
-            if not mod_name:
+            if mod_name and method_name:
+                dyn_func = getattr(locals().get(mod_name), method_name)
+            else:
                 logger.debug (f"No change indicated for {row} {col_name}")
+                continue
             # Faker has no parameters
-            elif "faker" in mod_name:
+            if "faker" in mod_name:
                 logger.debug(f"Transforming {col_name} with Faker")
-                func = getattr(locals().get(mod_name), method_name)
                 if method_name == "date_time_on_date":
-                    df.at[row, col_name] = func(df.at[row, col_name])
+                    df.at[row, col_name] = dyn_func(df.at[row, col_name])
                 else:
-                    df.at[row, col_name] = func()
+                    df.at[row, col_name] = dyn_func()
             elif "ffx" in mod_name:
                 try:
                     logger.debug(f"Transforming {col_name} with FFX")
-                    df.at[row, col_name] = getattr(locals().get(mod_name), method_name)(df.at[row, col_name], addition=ID_ADDITION)
+                    df.at[row, col_name] = dyn_func(df.at[row, col_name], addition=ID_ADDITION)
                 except ValueError:
                     logger.exception(f"Problem converting {df.at[row, col_name]}")
                     logger.info(np.isnan(df.at[row, col_name]))
@@ -129,22 +131,26 @@ for table in tables:
     # and applying the changes in bulk rather than individually
     for col in t_config:
         mod_name = col.get("module")
+        method_name = col.get("method")
         index_name = col.get("index")
         col_name = col.get("name")
         source_name = col.get("source")
-        if not mod_name: 
-                logger.debug (f"No change indicated for {col_name}")
-        elif "redist" in mod_name:
+        if mod_name and method_name:
+            dyn_func = getattr(locals().get(mod_name), method_name)
+        else:
+            logger.debug (f"No change indicated for {col_name}")
+            continue
+        if "redist" in mod_name:
             # If it gets here it has to be numeric
             logger.debug(f"{index_name} {col_name}")
-            util_methods.redist(df, col_name, index_name)
+            dyn_func(df, col_name, index_name)
         elif "mean" in mod_name:
             logger.debug(f"{index_name} {col_name}")
-            util_methods.mean(df, source_name, col_name, index_name)
+            dyn_func(df, source_name, col_name, index_name)
         elif "shuffle" in mod_name:
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")
-            util_methods.shuffle(df, shuffle_col=col_name, index_col=index_name)
+            dyn_func(df, shuffle_col=col_name, index_col=index_name)
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):

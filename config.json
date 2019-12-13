@@ -16,11 +16,11 @@
         {"name": "id", "module": null},
         {"name": "resource_id", "module": "ffx", "method": "encrypt"},
         {"name": "user_id", "module": "ffx", "method": "encrypt"},
-        {"name": "access_time", "module": "shuffle"}
+        {"name": "access_time", "module": "util_methods", "module": "shuffle"}
     ],
     "resource": [
         {"name": "id", "module": "ffx", "method": "encrypt"},
-        {"name": "resource_type", "module": "shuffle", "index": "course_id"},
+        {"name": "resource_type", "module": "util_methods", "method": "shuffle", "index": "course_id"},
         {"name": "name", "module": "faker", "method": "file_name"},
         {"name": "course_id", "module": "ffx", "method": "encrypt"}
     ],
@@ -53,7 +53,7 @@
                     {"name": "name", "module": "faker", "method": "assignment"},
                     {"name": "due_date", "module": "faker", "method": "date_time_on_date"},
                     {"name": "local_date", "module": "faker", "method": "date_time_on_date"},
-                    {"name": "points_possible", "module": "redist", "index": "assignment.course_id"},
+                    {"name": "points_possible", "module": "util_methods", "method": "redist", "index": "assignment.course_id"},
                     {"name": "course_id", "module": "ffx", "method": "encrypt"},
                     {"name": "assignment_group_id", "module": "ffx", "method": "encrypt"}
                 ]
@@ -67,7 +67,7 @@
                     {"name": "user_id", "module": "ffx", "method": "encrypt"},
                     {"name": "score", "module": "ffx", "method": "encrypt"},
                     {"name": "graded_date", "module": "faker", "method": "date_time_on_date"},
-                    {"name": "avg_score", "module": "mean", "source": "submission.score", "index": "submission.assignment_id"}
+                    {"name": "avg_score", "module": "util_methods", "method": "mean", "source": "submission.score", "index": "submission.assignment_id"}
                 ]
             }
         ]
