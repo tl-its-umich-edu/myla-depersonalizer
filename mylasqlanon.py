@@ -109,20 +109,20 @@ for table in tables:
                 logger.debug (f"No change indicated for {row} {col_name}")
                 continue
             # Faker has no parameters
-            if "faker" in mod_name:
+            if "faker" == mod_name:
                 logger.debug(f"Transforming {col_name} with Faker")
                 if method_name == "date_time_on_date":
                     df.at[row, col_name] = dyn_func(df.at[row, col_name])
                 else:
                     df.at[row, col_name] = dyn_func()
-            elif "ffx" in mod_name:
+            elif "ffx" == mod_name:
                 try:
                     logger.debug(f"Transforming {col_name} with FFX")
                     df.at[row, col_name] = dyn_func(df.at[row, col_name], addition=ID_ADDITION)
                 except ValueError:
                     logger.exception(f"Problem converting {df.at[row, col_name]}")
                     logger.info(np.isnan(df.at[row, col_name]))
-            elif "TODO" in "mod_name":
+            elif "TODO" == "mod_name":
                 logger.info(f"{row} {col_name} marked with TODO, skipping")
             # else currently do nothing
 
@@ -140,14 +140,14 @@ for table in tables:
         else:
             logger.debug (f"No change indicated for {col_name}")
             continue
-        if "redist" in method_name:
+        if "redist" == method_name:
             # If it gets here it has to be numeric
             logger.debug(f"{index_name} {col_name}")
             dyn_func(df, col_name, index_name)
-        elif "mean" in method_name:
+        elif "mean" == method_name:
             logger.debug(f"{index_name} {col_name}")
             dyn_func(df, source_name, col_name, index_name)
-        elif "shuffle" in method_name:
+        elif "shuffle" == method_name:
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")
             dyn_func(df, shuffle_col=col_name, index_col=index_name)
