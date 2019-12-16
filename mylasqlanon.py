@@ -140,14 +140,14 @@ for table in tables:
         else:
             logger.debug (f"No change indicated for {col_name}")
             continue
-        if "redist" in mod_name:
+        if "redist" in method_name:
             # If it gets here it has to be numeric
             logger.debug(f"{index_name} {col_name}")
             dyn_func(df, col_name, index_name)
-        elif "mean" in mod_name:
+        elif "mean" in method_name:
             logger.debug(f"{index_name} {col_name}")
             dyn_func(df, source_name, col_name, index_name)
-        elif "shuffle" in mod_name:
+        elif "shuffle" in method_name:
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")
             dyn_func(df, shuffle_col=col_name, index_col=index_name)
