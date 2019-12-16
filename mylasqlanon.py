@@ -72,8 +72,8 @@ for table in tables:
                 # Get the column name
                 join_col_name = join_col.get("name")
                 # Create a new alias
-                join_alias = join_table_name + "__" + join_col_name
-                tmp_cols.append(f"{join_table_name}.{join_col_name} AS {join_alias}")
+                join_alias = f"{join_table_name}.{join_col_name}"
+                tmp_cols.append(f"{join_table_name}.{join_col_name} AS `{join_alias}`")
                 # Update the alias in the column
                 join_col["name"] = join_alias
                 t_config.append(join_col)
@@ -100,22 +100,25 @@ for table in tables:
     for row in range(total_rows):
         for col in t_config:
             # Split the module from the function name
-            col_name = col.get('name')
-            mod_name, func_name = (col.get('method').rsplit('.', 1) + [None] * 2)[:2]
-            if "None" in mod_name:
+            col_name = col.get("name")
+            mod_name = col.get("module")
+            method_name = col.get("method")
+            if mod_name and method_name:
+                dyn_func = getattr(locals().get(mod_name), method_name)
+            else:
                 logger.debug (f"No change indicated for {row} {col_name}")
+                continue
             # Faker has no parameters
-            elif "faker" in mod_name:
+            if "faker" in mod_name:
                 logger.debug(f"Transforming {col_name} with Faker")
-                func = getattr(locals().get(mod_name), func_name)
-                if func_name == "date_time_on_date":
-                    df.at[row, col_name] = func(df.at[row, col_name])
+                if method_name == "date_time_on_date":
+                    df.at[row, col_name] = dyn_func(df.at[row, col_name])
                 else:
-                    df.at[row, col_name] = func()
+                    df.at[row, col_name] = dyn_func()
             elif "ffx" in mod_name:
                 try:
                     logger.debug(f"Transforming {col_name} with FFX")
-                    df.at[row, col_name] = getattr(locals().get(mod_name), func_name)(df.at[row, col_name], addition=ID_ADDITION)
+                    df.at[row, col_name] = dyn_func(df.at[row, col_name], addition=ID_ADDITION)
                 except ValueError:
                     logger.exception(f"Problem converting {df.at[row, col_name]}")
                     logger.info(np.isnan(df.at[row, col_name]))
@@ -127,21 +130,27 @@ for table in tables:
     # These methods are based on using another column as an index 
     # and applying the changes in bulk rather than individually
     for col in t_config:
-        mod_name, index_name = (col.get('method').rsplit('.', 1) + [None] * 2)[:2]
-        col_name = col.get('name')
+        mod_name = col.get("module")
+        method_name = col.get("method")
+        index_name = col.get("index")
+        col_name = col.get("name")
+        source_name = col.get("source")
+        if mod_name and method_name:
+            dyn_func = getattr(locals().get(mod_name), method_name)
+        else:
+            logger.debug (f"No change indicated for {col_name}")
+            continue
         if "redist" in mod_name:
             # If it gets here it has to be numeric
             logger.debug(f"{index_name} {col_name}")
-            util_methods.redist(df, col_name, index_name)
-        if "mean" in mod_name:
+            dyn_func(df, col_name, index_name)
+        elif "mean" in mod_name:
             logger.debug(f"{index_name} {col_name}")
-            # This is a special case variable that averages a column on an index
-            avg_col, index_name = (index_name.rsplit('____', 1))
-            util_methods.mean(df, avg_col, col_name, index_name)
-        if "shuffle" in mod_name:
+            dyn_func(df, source_name, col_name, index_name)
+        elif "shuffle" in mod_name:
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")
-            util_methods.shuffle(df, shuffle_col=col_name, index_col=index_name)
+            dyn_func(df, shuffle_col=col_name, index_col=index_name)
 
     # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):
