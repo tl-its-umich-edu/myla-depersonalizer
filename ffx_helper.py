@@ -26,10 +26,11 @@ class FFXEncrypt():
         v = s.replace(old, new, max)
         return count, v
 
-    def encrypt(self, val, addition: int = sys.maxsize):
+    def encrypt(self, val, addition: int = sys.maxsize, int_length: int = None):
         """ Encrypt a value with FFX library. Negative values are currently not supported as integers.
         :param val: Value to encrypt
         :type val: Either an integer, a string or a floating point number (represented as a string)
+        :param int_length: Length to use as the length for int. Not applicable to str. If 'None' calculate
         :param addition: Value added to an integer number, which will be subtracted first, defaults to sys.maxsize
         :param addition: int, optional
         :return: Encrypted number fitting same format as input
@@ -54,7 +55,8 @@ class FFXEncrypt():
                 logger.debug(f"n_val = {n_val} val = {val} addition = {addition}")
                 if n_val > 0:
                    val = n_val
-                e = pyffx.Integer(self.ffx_secret, length=len(str(val)))
+                vlen = int_length if int_length else len(str(val))
+                e = pyffx.Integer(self.ffx_secret, length=vlen)
                 enc = e.encrypt(val)
             else: # Either String or Decimal
                 val = str(val)
