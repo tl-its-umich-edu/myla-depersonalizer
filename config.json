@@ -16,7 +16,7 @@
         {"name": "id", "module": null},
         {"name": "resource_id", "module": "ffx", "method": "encrypt"},
         {"name": "user_id", "module": "ffx", "method": "encrypt"},
-        {"name": "access_time", "module": "util_methods", "module": "shuffle"}
+        {"name": "access_time", "module": "util_methods", "method": "shuffle"}
     ],
     "resource": [
         {"name": "id", "module": "ffx", "method": "encrypt"},
@@ -31,14 +31,14 @@
         {"name": "sis_id", "module": "ffx", "method": "encrypt"},
         {"name": "sis_name", "module": "faker", "method": "user_name"},
         {"name": "course_id", "module": "ffx", "method": "encrypt"},
-        {"name": "current_grade", "module": "redist", "index": "course_id"},
-        {"name": "final_grade", "module": "redist", "index": "course_id"}
+        {"name": "current_grade", "module": "util_methods", "method": "redist", "index": "course_id"},
+        {"name": "final_grade", "module": "util_methods", "method": "redist", "index": "course_id"}
     ],
     "assignment_groups": [
         {"name": "id", "module": "ffx", "method": "encrypt"},
         {"name": "name", "module": "faker", "method": "assignment"},
-        {"name": "weight", "module": "redist", "index": "course_id"},
-        {"name": "group_points", "module": "redist", "index": "course_id"}, 
+        {"name": "weight", "module": "util_methods", "method": "redist", "index": "course_id"},
+        {"name": "group_points", "module": "util_methods", "method": "redist", "index": "course_id"}, 
         {"name": "course_id", "module": "ffx", "method": "encrypt"},
         {"name": "drop_lowest", "module": null},
         {"name": "drop_highest", "module": null}

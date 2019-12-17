@@ -109,21 +109,19 @@ for table in tables:
                 logger.debug (f"No change indicated for {row} {col_name}")
                 continue
             # Faker has no parameters
-            if "faker" in mod_name:
+            if mod_name == "faker":
                 logger.debug(f"Transforming {col_name} with Faker")
                 if method_name == "date_time_on_date":
                     df.at[row, col_name] = dyn_func(df.at[row, col_name])
                 else:
                     df.at[row, col_name] = dyn_func()
-            elif "ffx" in mod_name:
+            elif mod_name == "ffx":
                 try:
                     logger.debug(f"Transforming {col_name} with FFX")
                     df.at[row, col_name] = dyn_func(df.at[row, col_name], addition=ID_ADDITION)
                 except ValueError:
                     logger.exception(f"Problem converting {df.at[row, col_name]}")
                     logger.info(np.isnan(df.at[row, col_name]))
-            elif "TODO" in "mod_name":
-                logger.info(f"{row} {col_name} marked with TODO, skipping")
             # else currently do nothing
 
     # Now go through the columns and look for column wide changes
@@ -140,19 +138,20 @@ for table in tables:
         else:
             logger.debug (f"No change indicated for {col_name}")
             continue
-        if "redist" in mod_name:
+        # TODO These are currently all "util_methods" but this should be refactored
+        # since these are all nearly identical
+        if method_name == "redist":
             # If it gets here it has to be numeric
             logger.debug(f"{index_name} {col_name}")
             dyn_func(df, col_name, index_name)
-        elif "mean" in mod_name:
+        elif method_name == "mean":
             logger.debug(f"{index_name} {col_name}")
             dyn_func(df, source_name, col_name, index_name)
-        elif "shuffle" in mod_name:
+        elif method_name == "shuffle":
             # Shuffle column inplace
             logger.debug(f"Shuffle {col_name}")
             dyn_func(df, shuffle_col=col_name, index_col=index_name)
 
-    # If the database should be updated, call to update
     if (config("UPDATE_DATABASE", cast=bool, default=False)):
         util_methods.pandas_delete_and_insert(table, df, engine)
 
