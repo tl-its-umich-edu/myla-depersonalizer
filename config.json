@@ -16,7 +16,7 @@
         {"name": "id", "module": null},
         {"name": "resource_id", "module": "ffx", "method": "encrypt"},
         {"name": "user_id", "module": "ffx", "method": "encrypt"},
-        {"name": "access_time", "module": "util_methods", "module": "shuffle"}
+        {"name": "access_time", "module": "util_methods", "method": "shuffle"}
     ],
     "resource": [
         {"name": "id", "module": "ffx", "method": "encrypt"},
