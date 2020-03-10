@@ -39,6 +39,8 @@ class TestAnonymizer(unittest.TestCase):
         # Create the pandas DataFrame
         return pd.DataFrame(data, columns=['file_id', 'file_type', 'user_id', 'access_time'])
 
+    def test_ffx_encrypt_length(self):
+        self.assertEqual(self.ffx.encrypt("123456", int_length=10), 6525251445)
     def test_ffx_encrypt(self):
         self.assertEqual(self.ffx.encrypt("ABC"), 'HZC')
     def test_ffx_prefix(self):

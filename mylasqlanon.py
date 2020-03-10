@@ -118,7 +118,7 @@ for table in tables:
             elif mod_name == "ffx":
                 try:
                     logger.debug(f"Transforming {col_name} with FFX")
-                    df.at[row, col_name] = dyn_func(df.at[row, col_name], addition=ID_ADDITION)
+                    df.at[row, col_name] = dyn_func(df.at[row, col_name], addition=ID_ADDITION, int_length=col.get("length"))
                 except ValueError:
                     logger.exception(f"Problem converting {df.at[row, col_name]}")
                     logger.info(np.isnan(df.at[row, col_name]))

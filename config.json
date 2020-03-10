@@ -7,39 +7,39 @@
         {"name": "date_end", "module": null}
     ],
     "course": [
-        {"name": "id", "module": "ffx", "method": "encrypt"},
-        {"name": "canvas_id", "module": "ffx", "method": "encrypt"},
+        {"name": "id", "module": "ffx", "method": "encrypt", "length": 8},
+        {"name": "canvas_id", "module": "ffx", "method": "encrypt", "length": 8},
         {"name": "term_id", "module": null},
         {"name": "name", "module": "faker", "method": "course"}
     ],
     "resource_access": [
         {"name": "id", "module": null},
-        {"name": "resource_id", "module": "ffx", "method": "encrypt"},
-        {"name": "user_id", "module": "ffx", "method": "encrypt"},
+        {"name": "resource_id", "module": "ffx", "method": "encrypt", "length": 12},
+        {"name": "user_id", "module": "ffx", "method": "encrypt", "length": 12},
         {"name": "access_time", "module": "util_methods", "method": "shuffle"}
     ],
     "resource": [
-        {"name": "id", "module": "ffx", "method": "encrypt"},
+        {"name": "id", "module": "ffx", "method": "encrypt", "length": 12},
         {"name": "resource_type", "module": "util_methods", "method": "shuffle", "index": "course_id"},
         {"name": "name", "module": "faker", "method": "file_name"},
-        {"name": "course_id", "module": "ffx", "method": "encrypt"}
+        {"name": "course_id", "module": "ffx", "method": "encrypt", "length": 8}
     ],
     "user": [
         {"name": "id", "module": null},
-        {"name": "user_id", "module": "ffx", "method": "encrypt"},
+        {"name": "user_id", "module": "ffx", "method": "encrypt", "length": 12},
         {"name": "name", "module": "faker", "method": "name"},
-        {"name": "sis_id", "module": "ffx", "method": "encrypt"},
+        {"name": "sis_id", "module": "ffx", "method": "encrypt", "length": 8},
         {"name": "sis_name", "module": "faker", "method": "user_name"},
-        {"name": "course_id", "module": "ffx", "method": "encrypt"},
+        {"name": "course_id", "module": "ffx", "method": "encrypt", "length": 8},
         {"name": "current_grade", "module": "util_methods", "method": "redist", "index": "course_id"},
         {"name": "final_grade", "module": "util_methods", "method": "redist", "index": "course_id"}
     ],
     "assignment_groups": [
-        {"name": "id", "module": "ffx", "method": "encrypt"},
+        {"name": "id", "module": "ffx", "method": "encrypt", "length": 12},
         {"name": "name", "module": "faker", "method": "assignment"},
         {"name": "weight", "module": "util_methods", "method": "redist", "index": "course_id"},
         {"name": "group_points", "module": "util_methods", "method": "redist", "index": "course_id"}, 
-        {"name": "course_id", "module": "ffx", "method": "encrypt"},
+        {"name": "course_id", "module": "ffx", "method": "encrypt", "length:": 8},
         {"name": "drop_lowest", "module": null},
         {"name": "drop_highest", "module": null}
     ],
@@ -49,22 +49,22 @@
             {
                 "name": "assignment",
                 "cols": [
-                    {"name": "id", "module": "ffx", "method": "encrypt"},
+                    {"name": "id", "module": "ffx", "method": "encrypt", "length": 12},
                     {"name": "name", "module": "faker", "method": "assignment"},
                     {"name": "due_date", "module": "faker", "method": "date_time_on_date"},
                     {"name": "local_date", "module": "faker", "method": "date_time_on_date"},
                     {"name": "points_possible", "module": "util_methods", "method": "redist", "index": "assignment.course_id"},
-                    {"name": "course_id", "module": "ffx", "method": "encrypt"},
-                    {"name": "assignment_group_id", "module": "ffx", "method": "encrypt"}
+                    {"name": "course_id", "module": "ffx", "method": "encrypt", "length": 8},
+                    {"name": "assignment_group_id", "module": "ffx", "method": "encrypt", "length": 12}
                 ]
             },
             {
                 "name": "submission",
                 "cols": [
-                    {"name": "id", "module": "ffx", "method": "encrypt"},
-                    {"name": "assignment_id", "module": "ffx", "method": "encrypt"},
-                    {"name": "course_id", "module": "ffx", "method": "encrypt"},
-                    {"name": "user_id", "module": "ffx", "method": "encrypt"},
+                    {"name": "id", "module": "ffx", "method": "encrypt", "length": 12},
+                    {"name": "assignment_id", "module": "ffx", "method": "encrypt", "length": 12},
+                    {"name": "course_id", "module": "ffx", "method": "encrypt", "length": 8},
+                    {"name": "user_id", "module": "ffx", "method": "encrypt", "length": 8},
                     {"name": "score", "module": "ffx", "method": "encrypt"},
                     {"name": "graded_date", "module": "faker", "method": "date_time_on_date"},
                     {"name": "avg_score", "module": "util_methods", "method": "mean", "source": "submission.score", "index": "submission.assignment_id"}
@@ -73,18 +73,18 @@
         ]
     },
     "assignment_weight_consideration": [
-        {"name": "course_id", "module": "ffx", "method": "encrypt"},
+        {"name": "course_id", "module": "ffx", "method": "encrypt", "length": 8},
         {"name": "consider_weight", "module": null}
     ],
     "course_view_option": [
-        {"name": "course_id", "module": "ffx", "method": "encrypt"},
+        {"name": "course_id", "module": "ffx", "method": "encrypt", "length": 8},
         {"name": "show_files_accessed", "module": null},
         {"name": "show_assignment_planning", "module": null},
         {"name": "show_grade_distribution", "module": null}
     ],
     "user_default_selection": [
-        {"name": "id", "module": "ffx", "method": "encrypt"},
-        {"name": "course_id", "module": "ffx", "method": "encrypt"},
+        {"name": "id", "module": "ffx", "method": "encrypt", "length": 8},
+        {"name": "course_id", "module": "ffx", "method": "encrypt", "length": 8},
         {"name": "user_sis_name", "module": "ffx", "method": "encrypt"},
         {"name": "default_view_type", "module": null},
         {"name": "default_view_value", "module": null}
