@@ -16,13 +16,14 @@
         {"name": "id", "module": null},
         {"name": "resource_id", "module": "ffx", "method": "encrypt"},
         {"name": "user_id", "module": "ffx", "method": "encrypt"},
-        {"name": "access_time", "module": "util_methods", "method": "shuffle"}
+        {"name": "access_time", "module": "util_methods", "method": "shuffle"},
+        {"name": "course_id", "module": "ffx", "method": "encrypt"}
     ],
     "resource": [
-        {"name": "id", "module": "ffx", "method": "encrypt"},
-        {"name": "resource_type", "module": "util_methods", "method": "shuffle", "index": "course_id"},
-        {"name": "name", "module": "faker", "method": "file_name"},
-        {"name": "course_id", "module": "ffx", "method": "encrypt"}
+        {"name": "id", "module": null},
+        {"name": "resource_id", "module": "ffx", "method": "encrypt"},
+        {"name": "resource_type", "module": "util_methods", "method": "shuffle"},
+        {"name": "name", "module": "faker", "method": "file_name"}
     ],
     "user": [
         {"name": "id", "module": null},
