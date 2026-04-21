@@ -6,6 +6,6 @@ pyffx==0.2.0
 numpy==1.22.0
 SQLAlchemy==1.3.6
 python_dateutil==2.8.0
-python-dotenv==0.10.1
+python-dotenv==1.2.2
 mysqlclient>=1.4,<1.4.99
 scipy
